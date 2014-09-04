@@ -48,9 +48,9 @@ default['wsus_server']['configuration']['properties']['TargetingMode']  = 'Clien
 
 # Determines whether the WSUS server synchronizes the updates automatically
 default['wsus_server']['subscription']['automatic_synchronization']     = true
-# Defines the list of categories of updates that you want the WSUS server to synchronize.
+# Defines the list of categories of updates that you want the WSUS server to synchronize. (Id or Title)
 default['wsus_server']['subscription']['categories']                    = nil
-# Defines the list of classifications of updates that you want the WSUS server to synchronize.
+# Defines the list of classifications of updates that you want the WSUS server to synchronize. (Id or Title)
 default['wsus_server']['subscription']['classifications']               = nil
 # Allows to configure any ISubscription's writable properties (explicit attributes prevails)
 default['wsus_server']['subscription']['properties']                    = {}

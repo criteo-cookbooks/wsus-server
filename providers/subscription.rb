@@ -44,24 +44,31 @@ def load_current_resource
 
       # Second document is the list of enabled categories
       Write-Host '---'
-      $subscription.GetUpdateCategories() | foreach { "- " + $_.Title }
+      $subscription.GetUpdateCategories() | foreach { "$($_.Id): $($_.Title)" }
 
       # Third document is the list of enabled classifications
       Write-Host '---'
-      $subscription.GetUpdateClassifications() | foreach { "- " + $_.Title }
+      $subscription.GetUpdateClassifications() | foreach { "$($_.Id): $($_.Title)" }
     }
   EOS
   properties, categories, classifications = YAML.load_stream(powershell_out64(script).stdout)
 
+  @category_map = categories || {}
+  @classificiation_map = classifications || {}
+
   @current_resource.properties properties
-  @current_resource.categories categories
-  @current_resource.classifications classifications
+  @current_resource.categories @category_map.values
+  @current_resource.classifications @classificiation_map.values
+end
+
+def compare_array_and_hash(array, hash)
+  array.all? { |e| hash.keys.include?(e) || hash.values.include?(e) } if array.size == hash.size
 end
 
 action :configure do
   updated_properties = diff_hash(@new_resource.properties, @current_resource.properties)
-  categories_unchanged = array_equals(@new_resource.categories, @current_resource.categories)
-  classifications_unchanged = array_equals(@new_resource.classifications, @current_resource.classifications)
+  categories_unchanged = compare_array_and_hash(@new_resource.categories, @category_map)
+  classifications_unchanged = compare_array_and_hash(@new_resource.classifications, @classificiation_map)
 
   unless updated_properties.empty? && categories_unchanged && classifications_unchanged
     script = <<-EOS
@@ -92,7 +99,8 @@ action :configure do
     unless categories_unchanged
       categories = powershell_value(@new_resource.categories)
       script << <<-EOS
-      $categories = $wsus.GetUpdateCategories() | where Title -in #{categories}
+      $cats = #{categories}
+      $categories = $wsus.GetUpdateCategories() | where { ($_.Title -in $cats) -or ($_.Id -in $cats) }
       if ($categories -ne $null)
       {
         $collection = New-Object Microsoft.UpdateServices.Administration.UpdateCategoryCollection
@@ -105,7 +113,8 @@ action :configure do
     unless classifications_unchanged
       classifications = powershell_value(@new_resource.classifications)
       script << <<-EOS
-      $classifications = $wsus.GetUpdateClassifications() | where Title -in #{classifications}
+      $clas = #{classifications}
+      $classifications = $wsus.GetUpdateClassifications() | where { ($_.Title -in $clas) -or ($_.Id -in $clas) }
       if ($classifications -ne $null)
       {
         $collection = New-Object Microsoft.UpdateServices.Administration.UpdateClassificationCollection
