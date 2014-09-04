@@ -20,24 +20,5 @@
 # WSUS is a windows only feature
 return unless platform?('windows')
 
-include_recipe 'wsus-server::install'
-include_recipe 'powershell::powershell4'
-
-
-sync_timeout = node['wsus_server']['synchronize']['timeout']
-powershell_script 'WSUS Update Synchronization' do
-  code <<-EOF
-    [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
-    $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
-    $subscription = $wsus.GetSubscription()
-
-    $subscription.StartSynchronization()
-    $timeout = #{sync_timeout}
-    if ($timeout -gt 0) {
-      $timeout = [DateTime]::Now.AddMinutes($timeout)
-      do {
-        Start-Sleep -Seconds 5
-      } until ($subscription.GetSynchronizationStatus() -eq 'NotProcessing' -or $timeout -lt [DateTime]::Now)
-    }
-  EOF
-end
+# Determines the synchronization timeout in minutes (zero or negative value for asynchronous synchronization).
+default['wsus_server']['synchronize']['timeout'] = 60
