@@ -25,7 +25,7 @@ def master_server(arg=nil)
 
     @properties['UpstreamWsusServerName'] = uri.host
     @properties['UpstreamWsusServerPortNumber'] = uri.port.to_i
-    @properties['UpstreamWsusServerUseSsl'] = 'https'.casecmp(uri.scheme)
+    @properties['UpstreamWsusServerUseSsl'] = 'https'.casecmp(uri.scheme).zero?
     @properties['SyncFromMicrosoftUpdate'] = false
     @properties['IsReplicaServer'] = true
   elsif @properties['IsReplicaServer'] == true && properties['SyncFromMicrosoftUpdate'] == false
