@@ -84,11 +84,10 @@ action :configure do
       script << <<-EOS
       $conf.StartSynchronizationForCategoryOnly()
 
-      $timeout = [DateTime]::Now.AddMinutes(10)
+      $timeout = [DateTime]::Now.AddMinutes(15)
       do {
         Start-Sleep -Seconds 5
-        $status = $conf.GetSynchronizationProgress().Phase
-      } until ($status -eq 'NotProcessing' -or $timeout -lt [DateTime]::Now)
+      } until ($conf.GetSynchronizationStatus() -eq 'NotProcessing' -or $timeout -lt [DateTime]::Now)
 
       # Renew update server and subscription
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
