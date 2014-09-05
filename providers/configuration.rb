@@ -44,7 +44,7 @@ def load_current_resource
 
       # Second document is the list of enabled Update languages on current server
       Write-Host '---'
-      $conf.GetEnabledUpdateLanguages() | foreach { "- " + $_ }
+      $conf.GetEnabledUpdateLanguages() | foreach { '- "' + $_ + '"' }
     }
   EOS
   properties, languages = YAML.load_stream(powershell_out64(script).stdout)
