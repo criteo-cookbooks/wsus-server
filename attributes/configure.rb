@@ -89,7 +89,7 @@ default['wsus_server']['notification']['smtp_password']                 = nil
 default['wsus_server']['notification']['smtp_port']                     = 25
 # Defines the e-mail sender's account name.
 default['wsus_server']['notification']['smtp_user']                     = nil
-# Defines the frequency with which e-mail notifications should be sent: daily or weekly.
-default['wsus_server']['notification']['status_notification_frequency'] = :daily
+# Defines the frequency with which e-mail notifications should be sent: 'Daily' or 'Weekly'.
+default['wsus_server']['notification']['status_notification_frequency'] = 'Daily'
 # Defines the time of the day e-mail notifications should be sent.
 default['wsus_server']['notification']['status_notification_time']      = '00:00:00'

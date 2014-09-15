@@ -45,7 +45,7 @@ module WsusServer
     end
 
     def validate_string(name, value, values)
-      unless values.include? value.to_s.downcase
+      unless values.include? value
         raise RangeError, "Invalid value for '#{name}', accepted values are '#{values.join('\', \'')}'"
       end
       value
