@@ -26,27 +26,29 @@ include_recipe 'powershell::powershell4'
 ::Chef::Recipe.send(:include, ::Chef::Mixin::PowershellOut)
 
 freeze = node['wsus_server']['freeze']['name']
-# Chef does not have guard_interpreter feature before 11.12.0
-guard_cmd = <<-EOH
-  [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
-  $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
-  ($wsus.GetComputerTargetGroups() | where Name -eq '#{freeze}') -eq $null
-EOH
 
-if powershell_out(guard_cmd).stdout.strip == 'True'
-  powershell_script 'WSUS Update Freeze' do
-    code <<-EOH
+powershell_script 'WSUS Update Freeze' do
+  code <<-EOH
+    [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
+    $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
+
+    $freeze_name = '#{freeze}'
+
+    $group = $wsus.GetComputerTargetGroups() | where Name -eq $freeze_name
+    if ($group -eq $null) {
+      $group = $wsus.CreateComputerTargetGroup($freeze_name)
+
+      $wsus.GetUpdates() | foreach { $_.Approve('Install', $group) }
+    }
+  EOH
+  only_if do
+    # Chef does not have guard_interpreter feature before 11.12.0
+    guard_cmd = <<-EOH
       [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
-
-      $freeze_name = '#{freeze}'
-
-      $group = $wsus.GetComputerTargetGroups() | where Name -eq $freeze_name
-      if ($group -eq $null) {
-        $group = $wsus.CreateComputerTargetGroup($freeze_name)
-
-        $wsus.GetUpdates() | foreach { $_.Approve('Install', $group) }
-      }
+      ($wsus.GetComputerTargetGroups() | where Name -eq '#{freeze}') -eq $null
     EOH
+
+    powershell_out(guard_cmd).stdout.strip == 'True'
   end
 end
