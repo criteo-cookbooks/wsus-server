@@ -54,7 +54,8 @@ end
 
 action :configure do
   updated_properties = diff_hash(@new_resource.properties, @current_resource.properties)
-  languages_unchanged = array_equals(@new_resource.update_languages, @current_resource.update_languages)
+  # Replica servers can't change their update languages
+  languages_unchanged = @new_resource.properties['IsReplicaServer'] || array_equals(@new_resource.update_languages, @current_resource.update_languages)
 
   unless updated_properties.empty? && languages_unchanged
     script = <<-EOS
