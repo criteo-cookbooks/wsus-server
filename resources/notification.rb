@@ -19,6 +19,8 @@
 #
 include WsusServer::BaseResource
 
+default_action :configure
+
 FREQUENCY_VALUES = ['daily', 'weekly']
 
 def enable_sync_notification(arg=nil)

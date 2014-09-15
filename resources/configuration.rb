@@ -19,6 +19,8 @@
 #
 include WsusServer::BaseResource
 
+default_action :configure
+
 def master_server(arg=nil)
   if arg
     uri = validate_http_uri('upstream_server', arg)

@@ -19,6 +19,8 @@
 #
 include WsusServer::BaseResource
 
+default_action :configure
+
 def automatic_synchronization(arg=nil)
   if arg
     validate_boolean('automatic_synchronization', arg)
