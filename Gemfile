@@ -1,3 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf'
+gem 'rake'
+
+group :test do
+  gem 'foodcritic'
+end
