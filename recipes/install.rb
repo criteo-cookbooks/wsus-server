@@ -20,9 +20,32 @@
 # WSUS is a windows only feature
 return unless platform?('windows')
 
-include_recipe 'iis'
-include_recipe 'wsus-server::report_viewer'
+# WSUS 3.0 SP2 requires some IIS features: http://technet.microsoft.com/en-us/library/dd939916.aspx
+features = %w(
+  IIS-WebServerRole
+  IIS-WebServer
+  IIS-ApplicationDevelopment
+  IIS-ISAPIFilter
+  IIS-ISAPIExtensions
+  IIS-NetFxExtensibility
+  IIS-ASPNET
+  IIS-WindowsAuthentication
+  IIS-HttpCompressionDynamic
+  IIS-IIS6ManagementCompatibility
+  IIS-WMICompatibility
+  IIS-Metabase
+  IIS-LegacyScripts
+)
 
+# IIS 6 SnapIn is not compatible with core version
+features << 'IIS-LegacySnapIn' unless Chef::ReservedNames::Win32::Version.new.core?
+features.each do |feature_name|
+  windows_feature feature_name do
+    action                                       :install
+  end
+end
+
+include_recipe 'wsus-server::report_viewer'
 
 setup_conf = node['wsus_server']['setup']
 package_info = node['wsus_server']['package']

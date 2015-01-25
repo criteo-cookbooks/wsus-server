@@ -20,11 +20,7 @@ The following cookbooks are required as noted:
 
 * [windows][windows_cookbook]
 
-    `wsus-server::install` leverages windows_package LWRP
-
-* [iis][iis_cookbook]
-
-    `wsus-server::install` requires iis setup with some useful features
+    `wsus-server::install` leverages windows_package and windows_feature LWRPs
 
 Attributes
 ----------

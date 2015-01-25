@@ -20,26 +20,6 @@
 # WSUS is a windows only feature
 return unless platform?('windows')
 
-# WSUS 3.0 SP2 requires some IIS features: http://technet.microsoft.com/en-us/library/dd939916.aspx
-default['iis']['components'] = %w(
-  IIS-WebServerRole
-  IIS-WebServer
-  IIS-ApplicationDevelopment
-  IIS-ISAPIFilter
-  IIS-ISAPIExtensions
-  IIS-NetFxExtensibility
-  IIS-ASPNET
-  IIS-WindowsAuthentication
-  IIS-HttpCompressionDynamic
-  IIS-IIS6ManagementCompatibility
-  IIS-WMICompatibility
-  IIS-Metabase
-  IIS-LegacyScripts
-)
-
-# IIS 6 SnapIn is not compatible with core version
-default['iis']['components'] << 'IIS-LegacySnapIn' unless Chef::ReservedNames::Win32::Version.new.core?
-
 #-----
 # Setup attributes are based on WSUS unattend install properties:
 # => http://technet.microsoft.com/en-us/library/dd939814.aspx
