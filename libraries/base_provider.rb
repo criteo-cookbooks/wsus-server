@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 module WsusServer
+  # Provide helpers methods to WsusServer providers
   module BaseProvider
     require 'uri'
     include Chef::Mixin::ShellOut
@@ -29,18 +30,18 @@ module WsusServer
     end
 
     def array_equals(arr1, arr2)
-      arr1.is_a?(Array) && arr2.is_a?(Array) && arr1.sort() == arr2.sort()
+      arr1.is_a?(Array) && arr2.is_a?(Array) && arr1.sort == arr2.sort
     end
 
     def diff_hash(hash1, hash2)
       hash1.find_all do |k, v|
         old_val = hash2[k]
-        v.is_a?(Array) ? ! array_equals(v, old_val) : v != old_val
+        v.is_a?(Array) ? !array_equals(v, old_val) : v != old_val
       end
     end
 
-    def endpoint_params()
-      @endpoint ||= @new_resource.endpoint ? WsusServer::BaseProvider::uri_to_wsus_endpoint_params(@new_resource.endpoint) : ''
+    def endpoint_params
+      @endpoint ||= @new_resource.endpoint ? WsusServer::BaseProvider.uri_to_wsus_endpoint_params(@new_resource.endpoint) : ''
     end
 
     def powershell_out64(cmd)
@@ -56,7 +57,7 @@ module WsusServer
         '-ExecutionPolicy RemoteSigned',
         # Powershell will hang if STDIN is redirected
         # http://connect.microsoft.com/PowerShell/feedback/details/572313/powershell-exe-can-hang-if-stdin-is-redirected
-        '-InputFormat None'
+        '-InputFormat None',
       ]
 
       cmd64 = Base64.strict_encode64(cmd.encode('UTF-16LE', 'UTF-8'))
@@ -68,15 +69,12 @@ module WsusServer
       when FalseClass
         'false'
       when Array
-        array = val.map { |v| powershell_value(v) }.join(',')
-        "@(#{array})"
+        "@(#{val.map { |v| powershell_value(v) }.join(',')})"
       when Hash
-        map = val.map { |k, v| "'#{k}' = "+ powershell_value(v) }.join('; ')
-        "@{#{map}}"
+        "@{#{val.map { |k, v| "'#{k}' = " + powershell_value(v) }.join('; ')}}"
       else
         "'#{val}'"
       end
     end
-
   end
 end

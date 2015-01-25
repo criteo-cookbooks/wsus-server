@@ -21,9 +21,9 @@ include WsusServer::BaseResource
 
 default_action :configure
 
-FREQUENCY_VALUES = ['Daily', 'Weekly']
+FREQUENCY_VALUES = %w(Daily Weekly)
 
-def enable_sync_notification(arg=nil)
+def enable_sync_notification(arg = nil)
   if arg
     @properties['SendSyncNotification'] = validate_boolean('enable_sync_notification', arg)
   else
@@ -31,7 +31,7 @@ def enable_sync_notification(arg=nil)
   end
 end
 
-def enable_smtp_authentication(arg=nil)
+def enable_smtp_authentication(arg = nil)
   if arg
     @properties['SmtpServerRequiresAuthentication'] = validate_boolean('enable_smtp_authentication', arg)
   else
@@ -39,7 +39,7 @@ def enable_smtp_authentication(arg=nil)
   end
 end
 
-def enable_status_notification(arg=nil)
+def enable_status_notification(arg = nil)
   if arg
     @properties['SendStatusNotification'] = validate_boolean('enable_status_notification', arg)
   else
@@ -47,7 +47,7 @@ def enable_status_notification(arg=nil)
   end
 end
 
-def language(arg=nil)
+def language(arg = nil)
   if arg
     @properties['EmailLanguage'] = arg
   else
@@ -55,7 +55,7 @@ def language(arg=nil)
   end
 end
 
-def sender_address(arg=nil)
+def sender_address(arg = nil)
   if arg
     @properties['SenderEmailAddress'] = arg
   else
@@ -63,7 +63,7 @@ def sender_address(arg=nil)
   end
 end
 
-def sender_name(arg=nil)
+def sender_name(arg = nil)
   if arg
     @properties['SenderDisplayName'] = arg
   else
@@ -71,7 +71,7 @@ def sender_name(arg=nil)
   end
 end
 
-def smtp_host(arg=nil)
+def smtp_host(arg = nil)
   if arg
     @properties['SmtpHostName'] = arg
   else
@@ -79,19 +79,19 @@ def smtp_host(arg=nil)
   end
 end
 
-def smtp_password(arg=nil)
-  set_or_return(:smtp_password, arg, :kind_of => String)
+def smtp_password(arg = nil)
+  set_or_return(:smtp_password, arg, kind_of: String)
 end
 
-def smtp_port(arg=nil)
+def smtp_port(arg = nil)
   if arg
-    @properties['SmtpPort'] = validate_integer('smtp_port', arg, 0, 65535)
+    @properties['SmtpPort'] = validate_integer('smtp_port', arg, 0, 65_535)
   else
     @properties['SmtpPort']
   end
 end
 
-def smtp_user(arg=nil)
+def smtp_user(arg = nil)
   if arg
     @properties['SmtpUserName'] = arg
   else
@@ -99,7 +99,7 @@ def smtp_user(arg=nil)
   end
 end
 
-def status_notification_frequency(arg=nil)
+def status_notification_frequency(arg = nil)
   if arg
     @properties['StatusNotificationFrequency'] = validate_string('status_notification_frequency', arg, FREQUENCY_VALUES)
   else
@@ -107,7 +107,7 @@ def status_notification_frequency(arg=nil)
   end
 end
 
-def status_notification_time(arg=nil)
+def status_notification_time(arg = nil)
   if arg
     @properties['StatusNotificationTimeOfDay'] = validate_time('status_notification_time', arg)
   else

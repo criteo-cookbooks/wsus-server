@@ -40,7 +40,6 @@ default['wsus_server']['configuration']['properties']                   = {}
 # => server = Servers specify the target group to which the clients belong.
 default['wsus_server']['configuration']['properties']['TargetingMode']  = 'Client'
 
-
 # -----
 # Following subscription attributes are based on the ISubscription interface
 # => http://msdn.microsoft.com/en-us/library/microsoft.updateservices.administration.isubscription_members.aspx
@@ -60,7 +59,6 @@ default['wsus_server']['subscription']['synchronization_per_day']       = '12'
 default['wsus_server']['subscription']['synchronization_time']          = '00:00:00'
 # Determines whether WSUS should synchronize categories before configuring above attributes.
 default['wsus_server']['subscription']['synchronize_categories']        = true
-
 
 # -----
 # Following notification attributes are based on the IEmailNotificationConfiguration interface

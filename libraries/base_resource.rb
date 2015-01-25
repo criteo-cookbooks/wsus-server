@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 module WsusServer
+  # Provide base implementation for WsusServer resources
   module BaseResource
     require 'uri'
 
@@ -46,7 +47,7 @@ module WsusServer
 
     def validate_string(name, value, values)
       unless values.include? value
-        raise RangeError, "Invalid value for '#{name}', accepted values are '#{values.join('\', \'')}'"
+        fail RangeError, "Invalid value for '#{name}', accepted values are '#{values.join('\', \'')}'"
       end
       value
     end
@@ -54,22 +55,22 @@ module WsusServer
     def validate_http_uri(name, value)
       uri = URI value
       uri = URI 'http://' + value unless uri.scheme # also validate the emptyness of the host
-      unless ['http', 'https'].include? uri.scheme.to_s.downcase
-        raise ArgumentError, "Invalid scheme for '#{name}' URI, accepted schemes are 'http' and 'https'"
+      unless %w(http https).include? uri.scheme.to_s.downcase
+        fail ArgumentError, "Invalid scheme for '#{name}' URI, accepted schemes are 'http' and 'https'"
       end
       uri
     end
 
     def validate_boolean(name, value)
       unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
-        raise TypeError, "Invalid value for '#{name}' expecting 'True' or 'False'"
+        fail TypeError, "Invalid value for '#{name}' expecting 'True' or 'False'"
       end
       value
     end
 
     def validate_time(name, value)
       unless value =~ /^([01]?[0-9]|2[0-3])(\:[0-5][0-9]){1,2}$/
-        raise ArgumentError, "Invalid value for '#{name}', format is: 'HH:MM:SS'"
+        fail ArgumentError, "Invalid value for '#{name}', format is: 'HH:MM:SS'"
       end
       value
     end
@@ -77,7 +78,7 @@ module WsusServer
     def validate_integer(name, value, min, max)
       i = value.to_i
       unless i >= min && i <= max && value.to_s =~ /^\d+$/
-        raise ArgumentError, "Invalid value for '#{name}', value must be between #{min} and #{max}"
+        fail ArgumentError, "Invalid value for '#{name}', value must be between #{min} and #{max}"
       end
       i
     end

@@ -21,7 +21,7 @@ include WsusServer::BaseResource
 
 default_action :configure
 
-def master_server(arg=nil)
+def master_server(arg = nil)
   if arg
     uri = validate_http_uri('upstream_server', arg)
 
@@ -40,10 +40,10 @@ def master_server(arg=nil)
   end
 end
 
-def proxy_password(arg=nil)
-  set_or_return(:proxy_password, arg, :kind_of => String)
+def proxy_password(arg = nil)
+  set_or_return(:proxy_password, arg, kind_of: String)
 end
 
-def update_languages(arg=nil)
-  set_or_return(:update_languages, arg, :kind_of => Array)
+def update_languages(arg = nil)
+  set_or_return(:update_languages, arg, kind_of: Array)
 end

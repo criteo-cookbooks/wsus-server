@@ -46,7 +46,7 @@ end
 
 action :configure do
   updated_properties = diff_hash(@new_resource.properties, @current_resource.properties)
-  if ! updated_properties.empty? || @new_resource.smtp_password
+  if !updated_properties.empty? || @new_resource.smtp_password
     script = <<-EOS
       [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
       # Sets invariant culture for current session to avoid Floating point conversion issue

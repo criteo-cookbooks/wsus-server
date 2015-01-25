@@ -21,24 +21,23 @@ include WsusServer::BaseResource
 
 default_action :configure
 
-def automatic_synchronization(arg=nil)
+def automatic_synchronization(arg = nil)
   if arg
-    validate_boolean('automatic_synchronization', arg)
-    @properties['SynchronizeAutomatically'] = arg
+    @properties['SynchronizeAutomatically'] = validate_boolean('automatic_synchronization', arg)
   else
     @properties['SynchronizeAutomatically']
   end
 end
 
-def categories(arg=nil)
-  set_or_return(:categories, arg, :kind_of => Array)
+def categories(arg = nil)
+  set_or_return(:categories, arg, kind_of: Array)
 end
 
-def classifications(arg=nil)
-  set_or_return(:classifications, arg, :kind_of => Array)
+def classifications(arg = nil)
+  set_or_return(:classifications, arg, kind_of: Array)
 end
 
-def synchronization_per_day(arg=nil)
+def synchronization_per_day(arg = nil)
   if arg
     @properties['NumberOfSynchronizationsPerDay'] = validate_integer('synchronization_per_day', arg, 1, 24)
   else
@@ -46,15 +45,14 @@ def synchronization_per_day(arg=nil)
   end
 end
 
-def synchronization_time(arg=nil)
+def synchronization_time(arg = nil)
   if arg
-    validate_time('synchronization_time', arg)
-    @properties['SynchronizeAutomaticallyTimeOfDay'] = arg
+    @properties['SynchronizeAutomaticallyTimeOfDay'] = validate_time('synchronization_time', arg)
   else
     @properties['SynchronizeAutomaticallyTimeOfDay']
   end
 end
 
-def synchronize_categories(arg=nil)
-  set_or_return(:synchronize_categories, arg, :kind_of => [TrueClass, FalseClass])
+def synchronize_categories(arg = nil)
+  set_or_return(:synchronize_categories, arg, kind_of: [TrueClass, FalseClass])
 end
