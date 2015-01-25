@@ -21,7 +21,6 @@
 return unless platform?('windows')
 
 include_recipe 'wsus-server::install'
-include_recipe 'powershell::powershell4'
 
 ::Chef::Recipe.send(:include, ::Chef::Mixin::PowershellOut)
 

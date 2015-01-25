@@ -14,10 +14,6 @@ This cookbook requires Chef 11.10.0+.
 ### Cookbooks
 The following cookbooks are required as noted:
 
-* [powershell][powershell_cookbook]
-
-    `wsus-server::freeze` and `wsus-server::synchronize` leverage the powershell_script resource and require powershell 4
-
 * [windows][windows_cookbook]
 
     `wsus-server::install` leverages windows_package and windows_feature LWRPs

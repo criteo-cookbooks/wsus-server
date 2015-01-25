@@ -6,5 +6,4 @@ description      'Installs wsus server'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.3'
 supports         'windows'
-depends          'powershell'
 depends          'windows'

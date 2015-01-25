@@ -21,8 +21,6 @@
 return unless platform?('windows')
 
 include_recipe 'wsus-server::install'
-include_recipe 'powershell::powershell4'
-
 
 sync_timeout = node['wsus_server']['synchronize']['timeout']
 powershell_script 'WSUS Update Synchronization' do
