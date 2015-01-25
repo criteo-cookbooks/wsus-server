@@ -25,7 +25,6 @@ module WsusServer
     require 'base64'
     include Chef::Mixin::ShellOut
 
-
     def self.uri_to_wsus_endpoint_params(uri)
       uri = URI uri
       "'#{uri.host}', #{'https'.casecmp(uri.scheme).zero?}, #{uri.port}"
@@ -62,8 +61,15 @@ module WsusServer
         '-InputFormat None',
       ]
 
-      cmd64 = Base64.strict_encode64(cmd.encode('UTF-16LE', 'UTF-8'))
-      shell_out "powershell.exe #{flags.join(' ')} -EncodedCommand #{cmd64}"
+      encoded_command = Base64.strict_encode64(cmd.encode('UTF-16LE', 'UTF-8'))
+      # Use powershell with absolute path to the binary (it's the same path for all versions)
+      # Use the sysnative folder to target the right powershell binary
+      # => https://msdn.microsoft.com/en-us/library/windows/desktop/aa384187.aspx
+      interpreter = '%windir%/SysNative/WindowsPowershell/v1.0/PowerShell.exe'
+      cmd = shell_out "#{interpreter} #{flags.join(' ')} -EncodedCommand #{encoded_command}", timeout: 300
+      cmd.error!
+      fail 'Invalid syntax in PowershellScript' if cmd.stderr && cmd.stderr.include?('ParserError')
+      cmd
     end
 
     def powershell_value(val)
