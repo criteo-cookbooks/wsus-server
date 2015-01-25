@@ -22,8 +22,6 @@ use_inline_resources
 include WsusServer::BaseProvider
 
 def load_current_resource
-  require 'YAML'
-
   @current_resource = Chef::Resource::WsusServerSubscription.new(@new_resource.name, @run_context)
   # Load current_resource from Powershell
   script = <<-EOS

@@ -21,6 +21,8 @@ module WsusServer
   # Provide helpers methods to WsusServer providers
   module BaseProvider
     require 'uri'
+    require 'yaml'
+    require 'base64'
     include Chef::Mixin::ShellOut
 
 
