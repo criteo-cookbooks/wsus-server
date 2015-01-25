@@ -24,58 +24,58 @@ default_action :configure
 FREQUENCY_VALUES = %w(Daily Weekly)
 
 def enable_sync_notification(arg = nil)
-  if arg
-    @properties['SendSyncNotification'] = validate_boolean('enable_sync_notification', arg)
-  else
+  if arg.nil?
     @properties['SendSyncNotification']
+  else
+    @properties['SendSyncNotification'] = validate_boolean('enable_sync_notification', arg)
   end
 end
 
 def enable_smtp_authentication(arg = nil)
-  if arg
-    @properties['SmtpServerRequiresAuthentication'] = validate_boolean('enable_smtp_authentication', arg)
-  else
+  if arg.nil?
     @properties['SmtpServerRequiresAuthentication']
+  else
+    @properties['SmtpServerRequiresAuthentication'] = validate_boolean('enable_smtp_authentication', arg)
   end
 end
 
 def enable_status_notification(arg = nil)
-  if arg
-    @properties['SendStatusNotification'] = validate_boolean('enable_status_notification', arg)
-  else
+  if arg.nil?
     @properties['SendStatusNotification']
+  else
+    @properties['SendStatusNotification'] = validate_boolean('enable_status_notification', arg)
   end
 end
 
 def language(arg = nil)
-  if arg
-    @properties['EmailLanguage'] = arg
-  else
+  if arg.nil?
     @properties['EmailLanguage']
+  else
+    @properties['EmailLanguage'] = arg
   end
 end
 
 def sender_address(arg = nil)
-  if arg
-    @properties['SenderEmailAddress'] = arg
-  else
+  if arg.nil?
     @properties['SenderEmailAddress']
+  else
+    @properties['SenderEmailAddress'] = arg
   end
 end
 
 def sender_name(arg = nil)
-  if arg
-    @properties['SenderDisplayName'] = arg
-  else
+  if arg.nil?
     @properties['SenderDisplayName']
+  else
+    @properties['SenderDisplayName'] = arg
   end
 end
 
 def smtp_host(arg = nil)
-  if arg
-    @properties['SmtpHostName'] = arg
-  else
+  if arg.nil?
     @properties['SmtpHostName']
+  else
+    @properties['SmtpHostName'] = arg
   end
 end
 
@@ -84,33 +84,33 @@ def smtp_password(arg = nil)
 end
 
 def smtp_port(arg = nil)
-  if arg
-    @properties['SmtpPort'] = validate_integer('smtp_port', arg, 0, 65_535)
-  else
+  if arg.nil?
     @properties['SmtpPort']
+  else
+    @properties['SmtpPort'] = validate_integer('smtp_port', arg, 0, 65_535)
   end
 end
 
 def smtp_user(arg = nil)
-  if arg
-    @properties['SmtpUserName'] = arg
-  else
+  if arg.nil?
     @properties['SmtpUserName']
+  else
+    @properties['SmtpUserName'] = arg
   end
 end
 
 def status_notification_frequency(arg = nil)
-  if arg
-    @properties['StatusNotificationFrequency'] = validate_string('status_notification_frequency', arg, FREQUENCY_VALUES)
-  else
+  if arg.nil?
     @properties['StatusNotificationFrequency']
+  else
+    @properties['StatusNotificationFrequency'] = validate_string('status_notification_frequency', arg, FREQUENCY_VALUES)
   end
 end
 
 def status_notification_time(arg = nil)
-  if arg
-    @properties['StatusNotificationTimeOfDay'] = validate_time('status_notification_time', arg)
-  else
+  if arg.nil?
     @properties['StatusNotificationTimeOfDay']
+  else
+    @properties['StatusNotificationTimeOfDay'] = validate_time('status_notification_time', arg)
   end
 end

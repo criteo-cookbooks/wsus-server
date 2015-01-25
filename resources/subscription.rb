@@ -22,10 +22,10 @@ include WsusServer::BaseResource
 default_action :configure
 
 def automatic_synchronization(arg = nil)
-  if arg
-    @properties['SynchronizeAutomatically'] = validate_boolean('automatic_synchronization', arg)
-  else
+  if arg.nil?
     @properties['SynchronizeAutomatically']
+  else
+    @properties['SynchronizeAutomatically'] = validate_boolean('automatic_synchronization', arg)
   end
 end
 
@@ -38,18 +38,18 @@ def classifications(arg = nil)
 end
 
 def synchronization_per_day(arg = nil)
-  if arg
-    @properties['NumberOfSynchronizationsPerDay'] = validate_integer('synchronization_per_day', arg, 1, 24)
-  else
+  if arg.nil?
     @properties['NumberOfSynchronizationsPerDay']
+  else
+    @properties['NumberOfSynchronizationsPerDay'] = validate_integer('synchronization_per_day', arg, 1, 24)
   end
 end
 
 def synchronization_time(arg = nil)
-  if arg
-    @properties['SynchronizeAutomaticallyTimeOfDay'] = validate_time('synchronization_time', arg)
-  else
+  if arg.nil?
     @properties['SynchronizeAutomaticallyTimeOfDay']
+  else
+    @properties['SynchronizeAutomaticallyTimeOfDay'] = validate_time('synchronization_time', arg)
   end
 end
 

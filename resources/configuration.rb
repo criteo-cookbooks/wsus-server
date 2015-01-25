@@ -22,7 +22,16 @@ include WsusServer::BaseResource
 default_action :configure
 
 def master_server(arg = nil)
-  if arg
+  if arg.nil?
+    if @properties['IsReplicaServer'] == true && properties['SyncFromMicrosoftUpdate'] == false
+      uri = URI ''
+      uri.scheme = @properties['UpstreamWsusServerUseSsl'] ? 'https' : 'http'
+      uri.host = @properties['UpstreamWsusServerName']
+      uri.port = @properties['UpstreamWsusServerPortNumber'].to_i if @properties['UpstreamWsusServerPortNumber']
+
+      uri
+    end
+  else
     uri = validate_http_uri('upstream_server', arg)
 
     @properties['UpstreamWsusServerName'] = uri.host
@@ -30,13 +39,6 @@ def master_server(arg = nil)
     @properties['UpstreamWsusServerUseSsl'] = 'https'.casecmp(uri.scheme).zero?
     @properties['SyncFromMicrosoftUpdate'] = false
     @properties['IsReplicaServer'] = true
-  elsif @properties['IsReplicaServer'] == true && properties['SyncFromMicrosoftUpdate'] == false
-    uri = URI ''
-    uri.scheme = @properties['UpstreamWsusServerUseSsl'] ? 'https' : 'http'
-    uri.host = @properties['UpstreamWsusServerName']
-    uri.port = @properties['UpstreamWsusServerPortNumber'].to_i if @properties['UpstreamWsusServerPortNumber']
-
-    uri
   end
 end
 

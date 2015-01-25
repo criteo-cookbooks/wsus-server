@@ -31,17 +31,13 @@ module WsusServer
       @properties = {}
     end
 
-    def endpoint(uri=nil)
-      if uri
-        @endpoint = validate_http_uri('endpoint', uri)
-      end
+    def endpoint(uri = nil)
+      @endpoint = validate_http_uri('endpoint', uri) unless uri.nil?
       @endpoint
     end
 
-    def properties(arg=nil)
-      if arg
-        @properties = arg.merge(@properties)
-      end
+    def properties(arg = nil)
+      @properties = arg.merge(@properties) unless arg.nil?
       @properties
     end
 
