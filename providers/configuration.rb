@@ -27,6 +27,8 @@ def load_current_resource
   script = <<-EOS
     $assembly = [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration')
     if ($assembly -ne $null) {
+      # Sets buffer size to avoid 80 column limitation, a width greater than 1000 is useless
+      $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(1000, $Host.UI.RawUI.BufferSize.Height)
       # Sets invariant culture for current session to avoid Floating point conversion issue
       [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
@@ -67,7 +69,11 @@ action :configure do
 
     unless languages_unchanged
       languages = powershell_value(@new_resource.update_languages)
-      script << "      $conf.SetEnabledUpdateLanguages(#{languages})\n"
+      script << <<-EOS
+      $collection = New-Object System.Collections.Specialized.StringCollection
+      $collection.AddRange(#{languages})
+      $conf.SetEnabledUpdateLanguages($collection)
+      EOS
     end
 
     updated_properties.each do |k, v|

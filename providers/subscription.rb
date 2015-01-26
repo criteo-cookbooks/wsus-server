@@ -27,6 +27,8 @@ def load_current_resource
   script = <<-EOS
     $assembly = [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration')
     if ($assembly -ne $null) {
+      # Sets buffer size to avoid 80 column limitation, a width greater than 1000 is useless
+      $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(1000, $Host.UI.RawUI.BufferSize.Height)
       # Sets invariant culture for current session to avoid Floating point conversion issue
       [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
@@ -97,7 +99,7 @@ action :configure do
       categories = powershell_value(@new_resource.categories)
       script << <<-EOS
       $cats = #{categories}
-      $categories = $wsus.GetUpdateCategories() | where { ($_.Title -in $cats) -or ($_.Id -in $cats) }
+      $categories = $wsus.GetUpdateCategories() | where { ([Array]::IndexOf($cats, $_.Title) -ne -1) -or ([Array]::IndexOf($cats, $_.Id.ToString()) -ne -1) }
       if ($categories -ne $null)
       {
         $collection = New-Object Microsoft.UpdateServices.Administration.UpdateCategoryCollection
@@ -111,7 +113,7 @@ action :configure do
       classifications = powershell_value(@new_resource.classifications)
       script << <<-EOS
       $clas = #{classifications}
-      $classifications = $wsus.GetUpdateClassifications() | where { ($_.Title -in $clas) -or ($_.Id -in $clas) }
+      $classifications = $wsus.GetUpdateClassifications() | where { ([Array]::IndexOf($clas, $_.Title) -ne -1) -or ([Array]::IndexOf($clas, $_.Id.ToString()) -ne -1) }
       if ($classifications -ne $null)
       {
         $collection = New-Object Microsoft.UpdateServices.Administration.UpdateClassificationCollection

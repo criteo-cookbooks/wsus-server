@@ -27,12 +27,14 @@ def load_current_resource
   script = <<-EOS
     $assembly = [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration')
     if ($assembly -ne $null) {
+      # Sets buffer size to avoid 80 column limitation, a width greater than 1000 is useless
+      $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(1000, $Host.UI.RawUI.BufferSize.Height)
       # Sets invariant culture for current session to avoid Floating point conversion issue
       [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
       # Defines single-level "YAML" formatters to avoid DateTime and TimeSpan conversion issue in ruby
       $valueFormatter = { param($_); if ($_ -is [DateTime] -or $_ -is [TimeSpan]) { "'$($_)'" } else { $_ } }
-      $objectFormatter = { param($_); $_.psobject.Properties | Where IsSettable | ForEach { "$($_.name): $(&$valueFormatter $_.value)" } }
+      $objectFormatter = { param($_); $_.psobject.Properties | foreach { if ($_.IsSettable) { "$($_.name): $(&$valueFormatter $_.value)" } } }
 
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
       &$objectFormatter $wsus.GetEmailNotificationConfiguration()
