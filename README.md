@@ -14,47 +14,24 @@ This cookbook requires Chef 11.10.0+.
 ### Cookbooks
 The following cookbooks are required as noted:
 
-* [windows][windows_cookbook]
-
-    `wsus-server::install` leverages windows_package and windows_feature LWRPs
+* [windows][windows_cookbook] (`wsus-server::install` leverages windows_package and windows_feature LWRPs)
 
 Attributes
 ----------
-TODO: List your cookbook attributes here.
-
-e.g.
-#### wsus-server::default
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['wsus-server']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
+#### wsus-server::configure
+#### wsus-server::install
+#### wsus-server::report_viewer
+#### wsus-server::synchronize
+#### wsus-server::freeze
 
 Usage
 -----
 #### wsus-server::default
-TODO: Write usage instructions for each cookbook.
-
-e.g.
-Just include `wsus-server` in your node's `run_list`:
-
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[wsus-server]"
-  ]
-}
-```
+#### wsus-server::configure
+#### wsus-server::install
+#### wsus-server::report_viewer
+#### wsus-server::synchronize
+#### wsus-server::freeze
 
 Contributing
 ------------
@@ -87,6 +64,4 @@ limitations under the License.
 
 [author]:                   https://github.com/Annih
 [repository]:               https://github.com/criteo-cookbooks/wsus-server
-[iis_cookbook]:             https://community.opscode.com/cookbooks/iis
-[powershell_cookbook]:      https://community.opscode.com/cookbooks/powershell
 [windows_cookbook]:         https://community.opscode.com/cookbooks/windows/
