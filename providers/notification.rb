@@ -25,20 +25,20 @@ def load_current_resource
   @current_resource = Chef::Resource::WsusServerNotification.new(@new_resource.name, @run_context)
   # Load current_resource from Powershell
   script = <<-EOS
-    $assembly = [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration')
-    if ($assembly -ne $null) {
-      # Sets buffer size to avoid 80 column limitation, a width greater than 1000 is useless
-      $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(1000, $Host.UI.RawUI.BufferSize.Height)
-      # Sets invariant culture for current session to avoid Floating point conversion issue
-      [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
+  $assembly = [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration')
+  if ($assembly -ne $null) {
+    # Sets buffer size to avoid 80 column limitation, a width greater than 1000 is useless
+    $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(1000, $Host.UI.RawUI.BufferSize.Height)
+    # Sets invariant culture for current session to avoid Floating point conversion issue
+    [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
-      # Defines single-level "YAML" formatters to avoid DateTime and TimeSpan conversion issue in ruby
-      $valueFormatter = { param($_); if ($_ -is [DateTime] -or $_ -is [TimeSpan]) { "'$($_)'" } else { $_ } }
-      $objectFormatter = { param($_); $_.psobject.Properties | foreach { if ($_.IsSettable) { "$($_.name): $(&$valueFormatter $_.value)" } } }
+    # Defines single-level "YAML" formatters to avoid DateTime and TimeSpan conversion issue in ruby
+    $valueFormatter = { param($_); if ($_ -is [DateTime] -or $_ -is [TimeSpan]) { "'$($_)'" } else { $_ } }
+    $objectFormatter = { param($_); $_.psobject.Properties | foreach { if ($_.IsSettable) { "$($_.name): $(&$valueFormatter $_.value)" } } }
 
-      $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
-      &$objectFormatter $wsus.GetEmailNotificationConfiguration()
-    }
+    $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
+    &$objectFormatter $wsus.GetEmailNotificationConfiguration()
+  }
   EOS
 
   @current_resource.properties(YAML.load(powershell_out64(script).stdout))
@@ -47,24 +47,25 @@ end
 action :configure do
   updated_properties = diff_hash(@new_resource.properties, @current_resource.properties)
   if !updated_properties.empty? || @new_resource.smtp_password
-    script = <<-EOS
+    converge_by 'configuring Wsus email notification' do
+      script = <<-EOS
       [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
       # Sets invariant culture for current session to avoid Floating point conversion issue
       [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
       $conf = $wsus.GetEmailNotificationConfiguration()
-    EOS
+      EOS
 
-    updated_properties.each do |k, v|
-      script << "      $conf.#{k} = #{powershell_value(v)}\n"
+      updated_properties.each do |k, v|
+        script << "$conf.#{k} = #{powershell_value(v)}\n"
+      end
+
+      script << "$conf.SetSmtpUserPassword(#{powershell_value(@new_resource.smtp_password)})" if @new_resource.smtp_password
+      script << '$conf.Save()'
+
+      powershell_out64 script
     end
-
-    script << "      $conf.SetSmtpUserPassword(#{powershell_value(@new_resource.smtp_password)})" if @new_resource.smtp_password
-    script << '      $conf.Save()'
-
-    powershell_script 'Wsus Email Notification configuration' do
-      code script
-    end
+    new_resource.updated_by_last_action true
   end
 end

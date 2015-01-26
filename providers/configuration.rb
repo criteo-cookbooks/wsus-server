@@ -47,6 +47,7 @@ def load_current_resource
       $conf.GetEnabledUpdateLanguages() | foreach { '- "' + $_ + '"' }
     }
   EOS
+
   properties, languages = YAML.load_stream(powershell_out64(script).stdout)
   @current_resource.properties properties
   @current_resource.update_languages languages
@@ -58,31 +59,32 @@ action :configure do
   languages_unchanged = @new_resource.properties['IsReplicaServer'] || array_equals(@new_resource.update_languages, @current_resource.update_languages)
 
   unless updated_properties.empty? && languages_unchanged
-    script = <<-EOS
-      [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
-      # Sets invariant culture for current session to avoid Floating point conversion issue
-      [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
+    converge_by 'configuring Wsus server' do
+      script = <<-EOS
+        [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
+        # Sets invariant culture for current session to avoid Floating point conversion issue
+        [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
-      $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
-      $conf = $wsus.GetConfiguration()
-    EOS
-
-    unless languages_unchanged
-      languages = powershell_value(@new_resource.update_languages)
-      script << <<-EOS
-      $collection = New-Object System.Collections.Specialized.StringCollection
-      $collection.AddRange(#{languages})
-      $conf.SetEnabledUpdateLanguages($collection)
+        $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
+        $conf = $wsus.GetConfiguration()
       EOS
-    end
 
-    updated_properties.each do |k, v|
-      script << "      $conf.#{k} = #{powershell_value(v)}\n"
-    end
-    script << '      $conf.Save()'
+      unless languages_unchanged
+        languages = powershell_value(@new_resource.update_languages)
+        script << <<-EOS
+        $collection = New-Object System.Collections.Specialized.StringCollection
+        $collection.AddRange(#{languages})
+        $conf.SetEnabledUpdateLanguages($collection)
+        EOS
+      end
 
-    powershell_script 'Server configuration' do
-      code script
+      updated_properties.each do |k, v|
+        script << "$conf.#{k} = #{powershell_value(v)}\n"
+      end
+      script << '$conf.Save()'
+
+      powershell_out64 script
     end
+    new_resource.updated_by_last_action true
   end
 end

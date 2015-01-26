@@ -25,6 +25,10 @@ module WsusServer
     require 'base64'
     include Chef::Mixin::ShellOut
 
+    def whyrun_supported?
+      true
+    end
+
     def self.uri_to_wsus_endpoint_params(uri)
       uri = URI uri
       "'#{uri.host}', #{'https'.casecmp(uri.scheme).zero?}, #{uri.port}"

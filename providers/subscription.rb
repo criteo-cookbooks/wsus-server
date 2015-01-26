@@ -51,6 +51,7 @@ def load_current_resource
       $subscription.GetUpdateClassifications() | foreach { "$($_.Id): $($_.Title)" }
     }
   EOS
+
   properties, categories, classifications = YAML.load_stream(powershell_out64(script).stdout)
 
   @category_map = categories || {}
@@ -71,65 +72,66 @@ action :configure do
   classifications_unchanged = compare_array_and_hash(@new_resource.classifications, @classificiation_map)
 
   unless updated_properties.empty? && categories_unchanged && classifications_unchanged
-    script = <<-EOS
-      [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
-      # Sets invariant culture for current session to avoid Floating point conversion issue
-      [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
+    converge_by 'configuring wsus server subscription' do
+      script = <<-EOS
+        [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
+        # Sets invariant culture for current session to avoid Floating point conversion issue
+        [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
-      $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
-      $conf = $wsus.GetSubscription()
-    EOS
-
-    if @new_resource.synchronize_categories
-      script << <<-EOS
-      $conf.StartSynchronizationForCategoryOnly()
-
-      $timeout = [DateTime]::Now.AddMinutes(15)
-      do {
-        Start-Sleep -Seconds 5
-      } until ($conf.GetSynchronizationStatus() -eq 'NotProcessing' -or $timeout -lt [DateTime]::Now)
-
-      # Renew update server and subscription
-      $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
-      $conf = $wsus.GetSubscription()
+        $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
+        $conf = $wsus.GetSubscription()
       EOS
-    end
 
-    unless categories_unchanged
-      categories = powershell_value(@new_resource.categories)
-      script << <<-EOS
-      $cats = #{categories}
-      $categories = $wsus.GetUpdateCategories() | where { ([Array]::IndexOf($cats, $_.Title) -ne -1) -or ([Array]::IndexOf($cats, $_.Id.ToString()) -ne -1) }
-      if ($categories -ne $null)
-      {
-        $collection = New-Object Microsoft.UpdateServices.Administration.UpdateCategoryCollection
-        $collection.AddRange($categories)
-        $conf.SetUpdateCategories($collection)
-      }
-      EOS
-    end
+      if @new_resource.synchronize_categories
+        script << <<-EOS
+        $conf.StartSynchronizationForCategoryOnly()
 
-    unless classifications_unchanged
-      classifications = powershell_value(@new_resource.classifications)
-      script << <<-EOS
-      $clas = #{classifications}
-      $classifications = $wsus.GetUpdateClassifications() | where { ([Array]::IndexOf($clas, $_.Title) -ne -1) -or ([Array]::IndexOf($clas, $_.Id.ToString()) -ne -1) }
-      if ($classifications -ne $null)
-      {
-        $collection = New-Object Microsoft.UpdateServices.Administration.UpdateClassificationCollection
-        $collection.AddRange($classifications)
-        $conf.SetUpdateClassifications($collection)
-      }
-      EOS
-    end
+        $timeout = [DateTime]::Now.AddMinutes(15)
+        do {
+          Start-Sleep -Seconds 5
+        } until ($conf.GetSynchronizationStatus() -eq 'NotProcessing' -or $timeout -lt [DateTime]::Now)
 
-    updated_properties.each do |k, v|
-      script << "      $conf.#{k} = #{powershell_value(v)}\n"
-    end
-    script << '      $conf.Save()'
+        # Renew update server and subscription
+        $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
+        $conf = $wsus.GetSubscription()
+        EOS
+      end
 
-    powershell_script 'Subscription configuration' do
-      code script
+      unless categories_unchanged
+        categories = powershell_value(@new_resource.categories)
+        script << <<-EOS
+        $cats = #{categories}
+        $categories = $wsus.GetUpdateCategories() | where { ([Array]::IndexOf($cats, $_.Title) -ne -1) -or ([Array]::IndexOf($cats, $_.Id.ToString()) -ne -1) }
+        if ($categories -ne $null)
+        {
+          $collection = New-Object Microsoft.UpdateServices.Administration.UpdateCategoryCollection
+          $collection.AddRange($categories)
+          $conf.SetUpdateCategories($collection)
+        }
+        EOS
+      end
+
+      unless classifications_unchanged
+        classifications = powershell_value(@new_resource.classifications)
+        script << <<-EOS
+        $clas = #{classifications}
+        $classifications = $wsus.GetUpdateClassifications() | where { ([Array]::IndexOf($clas, $_.Title) -ne -1) -or ([Array]::IndexOf($clas, $_.Id.ToString()) -ne -1) }
+        if ($classifications -ne $null)
+        {
+          $collection = New-Object Microsoft.UpdateServices.Administration.UpdateClassificationCollection
+          $collection.AddRange($classifications)
+          $conf.SetUpdateClassifications($collection)
+        }
+        EOS
+      end
+
+      updated_properties.each do |k, v|
+        script << "      $conf.#{k} = #{powershell_value(v)}\n"
+      end
+      script << '      $conf.Save()'
+
+      powershell_out64 script
     end
+    new_resource.updated_by_last_action true
   end
 end
