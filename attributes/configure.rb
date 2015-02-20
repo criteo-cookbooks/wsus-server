@@ -83,7 +83,7 @@ default['wsus_server']['notification']['sender_name']                   = nil
 default['wsus_server']['notification']['smtp_host']                     = nil
 # Defines the e-mail sender's password.
 default['wsus_server']['notification']['smtp_password']                 = nil
-# Defines the host name of the SMTP port used by notifications.
+# Defines the port of the SMTP server used for notifications.
 default['wsus_server']['notification']['smtp_port']                     = 25
 # Defines the e-mail sender's account name.
 default['wsus_server']['notification']['smtp_user']                     = nil

@@ -32,12 +32,12 @@ default['wsus_server']['setup']['content_dir']                  = nil
 # Defines the local or remote SQL instance used for WSUS configuration database.
 default['wsus_server']['setup']['sqlinstance_name']             = nil
 
-# Following attributes are not required anymore on Windows Server 2012 and earlier
+# Following attributes are not required anymore on Windows Server 2012 and later
 if node['platform_version'].to_f < 6.2
   # Enables the inventory feature.
   default['wsus_server']['setup']['enable_inventory']           = false
   # Determines whether WSUS should be setup as an additional frontend server.
-  # Frontend server shares the configuration of the main server, using the value of below attribute sqlinstance_name.
+  # Frontend server shares the configuration of the main server, using the value of above attribute sqlinstance_name.
   # see http://technet.microsoft.com/en-us/library/dd939896.aspx
   default['wsus_server']['setup']['frontend_setup']             = false
   # Joins the Microsoft Update Improvement Program.
