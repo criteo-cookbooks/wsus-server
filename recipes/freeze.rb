@@ -22,11 +22,10 @@ return unless platform?('windows')
 
 include_recipe 'wsus-server::install'
 
-::Chef::Recipe.send(:include, ::Chef::Mixin::PowershellOut)
 
 freeze = node['wsus_server']['freeze']['name']
 
-powershell_script 'WSUS Update Freeze' do
+powershell_script 'WSUS Update Freeze' do # ~FC009
   code <<-EOH
     [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
     $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
@@ -40,14 +39,10 @@ powershell_script 'WSUS Update Freeze' do
       $wsus.GetUpdates() | foreach { $_.Approve('Install', $group) }
     }
   EOH
-  only_if do
-    # Chef does not have guard_interpreter feature before 11.12.0
-    guard_cmd = <<-EOH
+  guard_interpreter :powershell_script
+  not_if            <<-EOH
       [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
       ($wsus.GetComputerTargetGroups() | where Name -eq '#{freeze}') -eq $null
-    EOH
-
-    powershell_out(guard_cmd).stdout.strip == 'True'
-  end
+  EOH
 end
