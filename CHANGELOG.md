@@ -2,6 +2,14 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+1.0.0 (2014-02-24)
+------------------
+- Supports Windows Server 2012 properly
+- Fix powershell execution on x64 node
+- Remove dependency on iis and powershell cookbooks
+- Depends on Chef 11.12.0+
+- Add Chefspec tests and proper documentation
+
 0.1.0 (2014-08-27)
 ------------------
 - Initial release of wsus-server
