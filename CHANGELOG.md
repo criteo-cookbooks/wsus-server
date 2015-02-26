@@ -2,6 +2,10 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+1.0.1 (2014-02-26)
+------------------
+- [PR 5](https://github.com/criteo-cookbooks/wsus-server/pull/5) - Fix property hash initialization
+
 1.0.0 (2014-02-24)
 ------------------
 - Supports Windows Server 2012 properly
