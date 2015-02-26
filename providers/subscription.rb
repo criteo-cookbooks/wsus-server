@@ -57,7 +57,7 @@ def load_current_resource
   @category_map = categories || {}
   @classificiation_map = classifications || {}
 
-  @current_resource.properties properties
+  @current_resource.properties.merge! properties
   @current_resource.categories @category_map.values
   @current_resource.classifications @classificiation_map.values
 end

@@ -49,7 +49,7 @@ def load_current_resource
   EOS
 
   properties, languages = YAML.load_stream(powershell_out64(script).stdout)
-  @current_resource.properties properties
+  @current_resource.properties.merge! properties
   @current_resource.update_languages languages
 end
 

@@ -21,6 +21,15 @@ include WsusServer::BaseResource
 
 default_action :configure
 
+def initialize(name, run_context = nil)
+  super(name, run_context)
+
+  # Default computed value for master_server is nil
+  @properties['UpstreamWsusServerName'] = nil
+  @properties['SyncFromMicrosoftUpdate'] = true
+  @properties['IsReplicaServer'] = false
+end
+
 def master_server(arg = nil)
   if arg.nil?
     if @properties['IsReplicaServer'] == true && properties['SyncFromMicrosoftUpdate'] == false

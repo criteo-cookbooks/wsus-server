@@ -41,7 +41,7 @@ def load_current_resource
   }
   EOS
 
-  @current_resource.properties(YAML.load(powershell_out64(script).stdout))
+  @current_resource.properties.merge! YAML.load(powershell_out64(script).stdout)
 end
 
 action :configure do
