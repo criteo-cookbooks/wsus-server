@@ -36,7 +36,12 @@ powershell_script 'WSUS Update Freeze' do # ~FC009
     if ($group -eq $null) {
       $group = $wsus.CreateComputerTargetGroup($freeze_name)
 
-      $wsus.GetUpdates() | foreach { $_.Approve('Install', $group) }
+      $wsus.GetUpdates() | foreach {
+        if ($_.RequiresLicenseAgreementAcceptance) {
+          $_.AcceptLicenseAgreement()
+        }
+        $_.Approve('Install', $group)
+      }
     }
   EOH
   guard_interpreter :powershell_script
