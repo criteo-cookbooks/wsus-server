@@ -14,14 +14,14 @@ describe 'wsus-server::freeze' do
     end
 
     it 'freezes updates when target group does not exist' do
-      stub_powershell_guard(false)
+      stub_powershell_guard(true)
       [windows2008_chef_run, windows2008_chef_run].each do |chef_run|
         expect(chef_run).to run_powershell_script('WSUS Update Freeze')
       end
     end
 
     it 'does not freeze updates when target group already exist' do
-      stub_powershell_guard(true)
+      stub_powershell_guard(false)
       [windows2008_chef_run, windows2008_chef_run].each do |chef_run|
         expect(chef_run).to_not run_powershell_script('WSUS Update Freeze')
       end

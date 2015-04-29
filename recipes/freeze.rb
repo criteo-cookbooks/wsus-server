@@ -40,7 +40,7 @@ powershell_script 'WSUS Update Freeze' do # ~FC009
     }
   EOH
   guard_interpreter :powershell_script
-  not_if            <<-EOH
+  only_if <<-EOH
       [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
       ($wsus.GetComputerTargetGroups() | where Name -eq '#{freeze}') -eq $null
