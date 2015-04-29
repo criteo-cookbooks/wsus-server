@@ -34,13 +34,20 @@ powershell_script 'WSUS Update Freeze' do # ~FC009
 
     $group = $wsus.GetComputerTargetGroups() | where Name -eq $freeze_name
     if ($group -eq $null) {
-      $group = $wsus.CreateComputerTargetGroup($freeze_name)
+      Try {
+        $group = $wsus.CreateComputerTargetGroup($freeze_name)
 
-      $wsus.GetUpdates() | foreach {
-        if ($_.RequiresLicenseAgreementAcceptance) {
-          $_.AcceptLicenseAgreement()
+        $wsus.GetUpdates() | foreach {
+          if ($_.RequiresLicenseAgreementAcceptance) {
+            $_.AcceptLicenseAgreement()
+          }
+          $_.Approve('Install', $group)
         }
-        $_.Approve('Install', $group)
+      }
+      Catch {
+        if ($group -ne $null) {
+          $group.Delete()
+        }
       }
     }
   EOH
