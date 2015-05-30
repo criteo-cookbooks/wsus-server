@@ -153,8 +153,6 @@ Attribute | Description                                               | Type   |
 ----------|-----------------------------------------------------------|--------|--------
 name      | Name of the frozen update list (computer group) to create | String | `nil`
 
-default['wsus_server']['freeze']['name'] = nil
-
 ## wsus-server::install
 This recipe can be included in a node's run_list to installs the latest available Windows Server Update Services.
 On Windows Server 2008 and 2008R2 it leverages the `windows_package` LWRP to installs WSUS 3.0 SP2
@@ -176,7 +174,7 @@ Accessible via `node['wsus_server']['setup']`
 Attribute               | Description                                        | Type   | Default
 ------------------------|----------------------------------------------------|--------|--------
 enable_inventory        | Enables the inventory feature                      | TrueClass, FalseClass | `false`
-frontend_setup          | Whether WSUS should be setup as an additional (frontend server](http://technet.microsoft.com/en-us/library/dd939896.aspx)| TrueClass, FalseClass | `false`
+frontend_setup          | Whether WSUS should be setup as an additional [frontend server][frontend_server]| TrueClass, FalseClass | `false`
 join_improvement_program| Joins the Microsoft Update Improvement Program     | TrueClass, FalseClass | `false`
 use_default_website     | Whether WSUS should be set as default website - port 80 instead of 8530 | TrueClass, FalseClass | `false`
 wyukon_data_dir         | Path to windows internal database data directory   | String | `nil`
@@ -200,7 +198,7 @@ Accessible via `node['wsus_server']['report_viewer']`.
 Attribute | Description                                        | Type   | Default
 ----------|----------------------------------------------------|--------|--------
 name      | Name of the windows package                        | String | `Microsoft Report Viewer Redistributable 2008 SP1`
-source    | Source of the windows package                      | String | [http://download.microsoft.com/.../ReportViewer.exe](http://download.microsoft.com/download/3/a/e/3aeb7a63-ade6-48c2-9b6a-d3b6bed17fe9/ReportViewer.exe)
+source    | Source of the windows package                      | String | [http://download.microsoft.com/.../ReportViewer.exe][report_viewer]
 checksum  | Checksum of the windows package                    | String | `1a0e41b1d82125ae214d3...f287290874ca2874b78f86a9`
 options   | Options to use when installing the windows package | String | `/q`
 
@@ -252,3 +250,5 @@ limitations under the License.
 [notification_members]:  http://msdn.microsoft.com/library/microsoft.updateservices.administration.iemailnotificationconfiguration_members
 [subscription]:          http://msdn.microsoft.com/library/microsoft.updateservices.administration.isubscription
 [subscription_members]:  http://msdn.microsoft.com/library/microsoft.updateservices.administration.isubscription_members
+[frontend_server]: 		 http://technet.microsoft.com/library/dd939896
+[report_viewer]:		 http://download.microsoft.com/download/3/a/e/3aeb7a63-ade6-48c2-9b6a-d3b6bed17fe9/ReportViewer.exe
