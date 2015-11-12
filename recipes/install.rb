@@ -22,8 +22,18 @@ return unless platform?('windows')
 
 setup_conf = node['wsus_server']['setup']
 
+require 'chef/win32/version'
+windows_version = Chef::ReservedNames::Win32::Version.new
+
 setup_options = ''
-setup_options << " SQL_INSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""        if setup_conf['sqlinstance_name']
+
+if setup_conf['sqlinstance_name']
+  if windows_version.windows_server_2012_r2?
+    setup_options << " SQL_INSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
+  else
+    setup_options << " SQLINSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
+  end
+end
 
 if setup_conf['content_dir']
   setup_options << " CONTENT_LOCAL=1 CONTENT_DIR=\"#{setup_conf['content_dir']}\""
@@ -33,7 +43,6 @@ if setup_conf['content_dir']
   end
 end
 
-require 'chef/win32/version'
 if node['platform_version'].to_f >= 6.2
 
   windows_feature 'UpdateServices' do
