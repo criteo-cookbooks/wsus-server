@@ -2,6 +2,10 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+1.0.3 (2015-11-16)
+------------------
+-  Fix option SQL_INSTANCE_NAME for windows 2012R2 - Thanks @jmunnik
+
 1.0.2 (2014-04-30)
 ------------------
 - [PR 6](https://github.com/criteo-cookbooks/wsus-server/pull/6) - Fix bugs in freeze recipe
