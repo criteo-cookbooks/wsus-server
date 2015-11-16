@@ -23,7 +23,13 @@ return unless platform?('windows')
 setup_conf = node['wsus_server']['setup']
 
 setup_options = ''
-setup_options << " SQLINSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""        if setup_conf['sqlinstance_name']
+if setup_conf['sqlinstance_name']
+  if node['platform_version'].to_f >= 6.2
+    setup_options << " SQL_INSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
+  else
+    setup_options << " SQLINSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
+  end
+end
 
 if setup_conf['content_dir']
   setup_options << " CONTENT_LOCAL=1 CONTENT_DIR=\"#{setup_conf['content_dir']}\""
