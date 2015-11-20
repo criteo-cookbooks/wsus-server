@@ -45,21 +45,25 @@ if node['platform_version'].to_f >= 6.2
   windows_feature 'UpdateServices' do
     action         :install
     all            true
+    provider       :windows_feature_powershell   
   end
 
   windows_feature 'UpdateServices-UI' do
     action         :install
     all            true
+    provider       :windows_feature_powershell   
   end
 
-  windows_feature 'UpdateServices-Database' do
-    action         setup_conf['sqlinstance_name'] ? :install : :remove
-    all            true
-  end
-
-  windows_feature 'UpdateServices-WidDatabase' do
+  windows_feature 'UpdateServices-WidDB' do
     action         setup_conf['sqlinstance_name'] ? :remove : :install
     all            true
+    provider       :windows_feature_powershell
+  end
+  
+  windows_feature 'UpdateServices-DB' do
+    action         setup_conf['sqlinstance_name'] ? :install : :remove
+    all            true
+    provider       :windows_feature_powershell
   end
 
   guard_file = ::File.join(Chef::Config['file_cache_path'], 'wsus_postinstall')
@@ -106,6 +110,7 @@ else
   features.each do |feature_name|
     windows_feature feature_name do
       action       :install
+      provider     :windows_feature_powershell
     end
   end
 
