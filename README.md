@@ -136,7 +136,7 @@ classifications           | List of update classifications to synchronize (ID or
 properties                | Hash to configure all [ISubscription][subscription_members] writeable properties | Hash | `{}`
 synchronization_per_day   | Number of server-to-server synchronizations a day          | FixNum                | `12`
 synchronization_time      | Time of day when WSUS synchronize updates and categories   | String                | `00:00:00`
-synchronization_categories| Synchronizes category before configuring other settings    | TrueClass, FalseClass | `true`
+synchronize_categories    | Synchronizes categories before configuring other settings  | TrueClass, FalseClass | `true`
 
 
 ## wsus-server::default
