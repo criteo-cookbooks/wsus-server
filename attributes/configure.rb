@@ -59,6 +59,8 @@ default['wsus_server']['subscription']['synchronization_per_day']       = '12'
 default['wsus_server']['subscription']['synchronization_time']          = '00:00:00'
 # Determines whether WSUS should synchronize categories before configuring above attributes.
 default['wsus_server']['subscription']['synchronize_categories']        = true
+# Defines the timeout in seconds for the subscription configuration (including category synchronization if synchronize_categories is true)
+default['wsus_server']['subscription']['configure_timeout']             = 900
 
 # -----
 # Following notification attributes are based on the IEmailNotificationConfiguration interface

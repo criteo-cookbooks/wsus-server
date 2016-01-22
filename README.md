@@ -82,6 +82,7 @@ properties               | Hash to configure all [ISubscription][subscription_me
 synchronization_per_day  | Number of server-to-server synchronizations a day | FixNum
 synchronization_time     | Time of day to automatically synchronize updates  | String
 synchronize_categories   | Whether to only synchronize categories not updates| TrueClass, FalseClass
+configure_timeout        | Timeout in seconds for subscription configuration | FixNum
 
 Recipes
 -------
@@ -137,6 +138,7 @@ properties                | Hash to configure all [ISubscription][subscription_m
 synchronization_per_day   | Number of server-to-server synchronizations a day          | FixNum                | `12`
 synchronization_time      | Time of day when WSUS synchronize updates and categories   | String                | `00:00:00`
 synchronize_categories    | Synchronizes categories before configuring other settings  | TrueClass, FalseClass | `true`
+configure_timeout         | Timeout in seconds for subscription configuration          | FixNum                | `900`
 
 
 ## wsus-server::default
