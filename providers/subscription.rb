@@ -130,7 +130,7 @@ action :configure do
       end
       script << '      $conf.Save()'
 
-      powershell_out64 script
+      powershell_out64(script, @new_resource.configure_timeout)
     end
     new_resource.updated_by_last_action true
   end

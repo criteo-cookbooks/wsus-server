@@ -41,6 +41,7 @@ unless server_conf['master_server'] || server_conf['properties']['IsReplicaServe
     synchronization_per_day                        subscription_conf['synchronization_per_day']
     synchronization_time                           subscription_conf['synchronization_time']
     synchronize_categories                         subscription_conf['synchronize_categories']
+    configure_timeout                              subscription_conf['configure_timeout']
   end
 
   # Updates notification settings

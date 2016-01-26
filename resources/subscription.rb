@@ -56,3 +56,7 @@ end
 def synchronize_categories(arg = nil)
   set_or_return(:synchronize_categories, arg, kind_of: [TrueClass, FalseClass])
 end
+
+def configure_timeout(arg = nil)
+  set_or_return(:configure_timeout, arg, kind_of: Fixnum)
+end

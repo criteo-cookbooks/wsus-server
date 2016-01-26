@@ -49,7 +49,7 @@ module WsusServer
       @endpoint ||= @new_resource.endpoint ? WsusServer::BaseProvider.uri_to_wsus_endpoint_params(@new_resource.endpoint) : ''
     end
 
-    def powershell_out64(cmd)
+    def powershell_out64(cmd, timeout=300)
       flags = [
         # Hides the copyright banner at startup.
         '-NoLogo',
@@ -70,7 +70,7 @@ module WsusServer
       # Use the sysnative folder to target the right powershell binary
       # => https://msdn.microsoft.com/en-us/library/windows/desktop/aa384187.aspx
       interpreter = '%windir%/SysNative/WindowsPowershell/v1.0/PowerShell.exe'
-      cmd = shell_out "#{interpreter} #{flags.join(' ')} -EncodedCommand #{encoded_command}", timeout: 300
+      cmd = shell_out "#{interpreter} #{flags.join(' ')} -EncodedCommand #{encoded_command}", timeout: timeout
       cmd.error!
       fail 'Invalid syntax in PowershellScript' if cmd.stderr && cmd.stderr.include?('ParserError')
       cmd
