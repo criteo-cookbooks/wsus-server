@@ -24,6 +24,7 @@ module WsusServer
     require 'yaml'
     require 'base64'
     include Chef::Mixin::ShellOut
+    include Windows::Helper
 
     def whyrun_supported?
       true
@@ -49,6 +50,10 @@ module WsusServer
       @endpoint ||= @new_resource.endpoint ? WsusServer::BaseProvider.uri_to_wsus_endpoint_params(@new_resource.endpoint) : ''
     end
 
+    def powershell
+      locate_sysnative_cmd('powershell.exe')
+    end
+
     def powershell_out64(cmd, timeout=300)
       flags = [
         # Hides the copyright banner at startup.
@@ -67,10 +72,9 @@ module WsusServer
 
       encoded_command = Base64.strict_encode64(cmd.encode('UTF-16LE', 'UTF-8'))
       # Use powershell with absolute path to the binary (it's the same path for all versions)
-      # Use the sysnative folder to target the right powershell binary
+      # Use the locate_sysnative helper to target the right powershell binary
       # => https://msdn.microsoft.com/en-us/library/windows/desktop/aa384187.aspx
-      interpreter = '%windir%/SysNative/WindowsPowershell/v1.0/PowerShell.exe'
-      cmd = shell_out "#{interpreter} #{flags.join(' ')} -EncodedCommand #{encoded_command}", timeout: timeout
+      cmd = shell_out "#{powershell} #{flags.join(' ')} -EncodedCommand #{encoded_command}", timeout: timeout
       cmd.error!
       fail 'Invalid syntax in PowershellScript' if cmd.stderr && cmd.stderr.include?('ParserError')
       cmd
