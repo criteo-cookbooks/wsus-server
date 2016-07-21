@@ -4,7 +4,9 @@ rvm:
 - 2.3.0
 sudo: false
 deploy:
-  edge: true
+  edge:
+    source: criteo-forks/dpl
+    branch: chef_supermarket_dependency_on_mime_type
   provider: chef-supermarket
   user_id: criteo
   cookbook_category: Package Management
@@ -13,5 +15,6 @@ deploy:
     tags: true
     all_branches: true
 before_deploy:
+- rvm 1.9.3 --fuzzy do ruby -S gem install json_pure
 - openssl aes-256-cbc -K $encrypted_279b18d6fd1c_key -iv $encrypted_279b18d6fd1c_iv
   -in .travis/client.pem.enc -out .travis/client.pem -d
