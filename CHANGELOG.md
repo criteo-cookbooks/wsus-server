@@ -2,6 +2,12 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+1.0.5 (2016-07-21)
+------------------
+- [PR 19](https://github.com/criteo-cookbooks/wsus-server/pull/19) - Fix powershell binary path using locate_sysnative helper - Thanks @jmunnik
+- [PR 15](https://github.com/criteo-cookbooks/wsus-server/pull/15) - Add a timeout on subscription configuration - Thanks @martinheg
+- [PR 14](https://github.com/criteo-cookbooks/wsus-server/pull/14) - Fix description of synchronize_categories in README.md - Thanks @martinheg
+
 1.0.4 (2015-11-24)
 ------------------
 - [PR 9](https://github.com/criteo-cookbooks/wsus-server/pull/9) - Fix Windows feature activation using powershell provider - Thanks @Vladyslav-M
