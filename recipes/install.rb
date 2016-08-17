@@ -41,17 +41,16 @@ end
 
 require 'chef/win32/version'
 if node['platform_version'].to_f >= 6.2
-
-  windows_feature 'UpdateServices' do
-    action         :install
-    all            true
-    provider       :windows_feature_powershell   
-  end
-
-  windows_feature 'UpdateServices-UI' do
-    action         :install
-    all            true
-    provider       :windows_feature_powershell   
+  [
+    'NET-WCF-HTTP-Activation45', # This feature is required for KB3159706
+    'UpdateServices',
+    'UpdateServices-UI',
+  ].each do |feature_name|
+    windows_feature feature_name do
+      action         :install
+      all            true
+      provider       :windows_feature_powershell
+    end
   end
 
   windows_feature 'UpdateServices-WidDB' do
