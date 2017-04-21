@@ -60,21 +60,15 @@ if node['platform_version'].to_f >= 6.2
   windows_feature 'UpdateServices-WidDB' do
     action         setup_conf['sqlinstance_name'] ? :remove : :install
     all            true
-    if node['cookbooks']['windows']['version'].split('.')[0].to_i >= 3
-      install_method :windows_feature_powershell
-    else
-      provider       :windows_feature_powershell
-    end
+    install_method :windows_feature_powershell if respond_to? :install_method
+    provider       :windows_feature_powershell unless respond_to? :provider
   end
 
   windows_feature 'UpdateServices-DB' do
     action         setup_conf['sqlinstance_name'] ? :install : :remove
     all            true
-    if node['cookbooks']['windows']['version'].split('.')[0].to_i >= 3
-      install_method :windows_feature_powershell
-    else
-      provider       :windows_feature_powershell
-    end
+    install_method :windows_feature_powershell if respond_to? :install_method
+    provider       :windows_feature_powershell unless respond_to? :provider
   end
 
   guard_file = ::File.join(Chef::Config['file_cache_path'], 'wsus_postinstall')
@@ -121,11 +115,8 @@ else
   features.each do |feature_name|
     windows_feature feature_name do
       action         :install
-      if node['cookbooks']['windows']['version'].split('.')[0].to_i >= 3
-        install_method :windows_feature_powershell
-      else
-        provider       :windows_feature_powershell
-      end
+      install_method :windows_feature_powershell if respond_to? :install_method
+      provider       :windows_feature_powershell unless respond_to? :provider
     end
   end
 
