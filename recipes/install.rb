@@ -49,20 +49,23 @@ if node['platform_version'].to_f >= 6.2
     windows_feature feature_name do
       action         :install
       all            true
-      provider       :windows_feature_powershell
+      install_method :windows_feature_powershell if respond_to? :install_method
+      provider       :windows_feature_powershell unless respond_to? :install_method
     end
   end
 
   windows_feature 'UpdateServices-WidDB' do
     action         setup_conf['sqlinstance_name'] ? :remove : :install
     all            true
-    provider       :windows_feature_powershell
+    install_method :windows_feature_powershell if respond_to? :install_method
+    provider       :windows_feature_powershell unless respond_to? :install_method
   end
-  
+
   windows_feature 'UpdateServices-DB' do
     action         setup_conf['sqlinstance_name'] ? :install : :remove
     all            true
-    provider       :windows_feature_powershell
+    install_method :windows_feature_powershell if respond_to? :install_method
+    provider       :windows_feature_powershell unless respond_to? :install_method
   end
 
   guard_file = ::File.join(Chef::Config['file_cache_path'], 'wsus_postinstall')
@@ -108,8 +111,9 @@ else
   features << 'IIS-LegacySnapIn' unless Chef::ReservedNames::Win32::Version.new.core?
   features.each do |feature_name|
     windows_feature feature_name do
-      action       :install
-      provider     :windows_feature_powershell
+      action         :install
+      install_method :windows_feature_powershell if respond_to? :install_method
+      provider       :windows_feature_powershell unless respond_to? :install_method
     end
   end
 
