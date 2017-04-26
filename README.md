@@ -7,7 +7,7 @@ Installs WSUS (Windows Server Update Services) and configure approved updates.
 
 Requirements
 ------------
-This cookbook requires Chef 11.12.0+ because it leverages the `guard_interpreter` feature for powershell scripts.
+This cookbook requires Chef 12.1+.
 
 ### Platforms
 * Windows Server 2008 (R1, R2)

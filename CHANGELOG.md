@@ -2,6 +2,12 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+2.0.0 (2017-04-26)
+------------------
+- Requires at least chef 12.1
+- [PR 22](https://github.com/criteo-cookbooks/wsus-server/pull/22) - Fix compatibility with cookbook windows 3.0 - Thanks @Stromweld
+- [PR 20](https://github.com/criteo-cookbooks/wsus-server/pull/20) - Enable WCF-HTTP-Activation on Server 2012R2
+
 1.0.5 (2016-07-21)
 ------------------
 - [PR 19](https://github.com/criteo-cookbooks/wsus-server/pull/19) - Fix powershell binary path using locate_sysnative helper - Thanks @jmunnik
