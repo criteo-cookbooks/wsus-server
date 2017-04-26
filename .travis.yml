@@ -4,9 +4,7 @@ rvm:
 - 2.3.0
 sudo: false
 deploy:
-  edge:
-    source: criteo-forks/dpl
-    branch: chef_supermarket_dependency_on_mime_type
+  edge: true
   provider: chef-supermarket
   user_id: criteo
   cookbook_category: Package Management
