@@ -1,7 +1,9 @@
 Wsus-server Cookbook
 =============
-Installs WSUS (Windows Server Update Services) and configure approved updates.
+[![Cookbook Version][cookbook_version]][cookbook]
+[![Build Status][build_status]][build_status]
 
+Installs WSUS (Windows Server Update Services) and configure approved updates.
 
 Requirements
 ------------
@@ -254,3 +256,6 @@ limitations under the License.
 [subscription_members]:  http://msdn.microsoft.com/library/microsoft.updateservices.administration.isubscription_members
 [frontend_server]: 		 http://technet.microsoft.com/library/dd939896
 [report_viewer]:		 http://download.microsoft.com/download/3/a/e/3aeb7a63-ade6-48c2-9b6a-d3b6bed17fe9/ReportViewer.exe
+[build_status]:          https://api.travis-ci.org/criteo-cookbooks/wsus-server.svg?branch=master
+[cookbook_version]:      https://img.shields.io/cookbook/v/wsus-server.svg
+[cookbook]:              https://supermarket.chef.io/cookbooks/wsus-server
