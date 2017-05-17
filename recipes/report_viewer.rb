@@ -20,12 +20,14 @@
 # WSUS is a windows only feature
 return unless platform?('windows')
 
-package_info = node['wsus_server']['report_viewer']
+%w(prerequisite runtime).each do |package|
+  package_info = node['wsus_server']['report_viewer'][package]
 
-windows_package   package_info['name'] do
-  action          :install
-  installer_type  :custom
-  source          package_info['source']
-  checksum        package_info['checksum']
-  options         package_info['options']
+  windows_package   package_info['name'] do
+    action          :install
+    installer_type  :custom
+    source          package_info['source']
+    checksum        package_info['checksum']
+    options         package_info['options']
+  end
 end
