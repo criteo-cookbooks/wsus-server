@@ -8,7 +8,7 @@ deploy:
   provider: chef-supermarket
   user_id: criteo
   cookbook_category: Package Management
-  client_key: .travis/client.pem
+  client_key: ".travis/client.pem"
   on:
     tags: true
     all_branches: true
@@ -16,3 +16,12 @@ before_deploy:
 - rvm 1.9.3 --fuzzy do ruby -S gem install json_pure
 - openssl aes-256-cbc -K $encrypted_279b18d6fd1c_key -iv $encrypted_279b18d6fd1c_iv
   -in .travis/client.pem.enc -out .travis/client.pem -d
+before_install:
+- openssl aes-256-cbc -K $encrypted_6d23d554c016_key -iv $encrypted_6d23d554c016_iv
+  -in .travis/travis-ci.pem.enc -out ~/.ssh/id_rsa -d
+env:
+  global:
+  - secure: GwNEokxFOfMTr1bNyUdlQz4k59Ytcne11CWANymcbmhptHz7UUKiwBcYopjiObloXPvjvLgzbbdNiLa3ww/cdK+LHCyr2790VDc9gnAxJ8BiASAMIgp8HOgW2IcbXB/YReNPA/WhLkTinVRsp/BbLzpbSAmSSGkrl3dpqKXmay4=
+  - secure: chA8uXmufNYYholAH6YJxSA5ZNnlxz2b782QCUPibxgUUg45698arh08rW9GEVyGWtUam04xX2mQYW5F7oqpRDwnyETkPETLyfA+hEEOHe+evy7Gh+6llzKxG7JdZSg6HyER1okl/1w5aPkd6HhCzBG1nVIJykjopsei5k7X5EA=
+  - secure: H3IIB1mo3QJmvr7dXsnS9oHJfKdBrj+g9djUmg2pUN3GwOw05PrGub3Y+HET9KWcgjxeM0wOt4dABxeDSPqiFmiKwmfVfpi2Ew6vt/DD30P8lCce5/yYIAlo/ixiiPxkOKaakz6Biwd+4lSaZDuBms83wl5u2FI59EGx9sFIoZo=
+  - secure: UnZMPdD69WbSNaSr7eFB7k7iLC2uEKvcZWdZe0Pf+qt/vab07Ipuu78nYJdpxBiU+0lSQQutxj/CtE+k3Am+fFsVAbGCbLlUmskT1u5fNlZKF5a9FpAd4GXqFfl5rc85d/6X+xGCjnT7TleMQ6vzauOO/I0Oze6cddBLp6MWUy8=
