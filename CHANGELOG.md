@@ -2,6 +2,11 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+
+2.1.0 (2017-05-23)
+------------------
+- [PR 24](https://github.com/criteo-cookbooks/wsus-server/pull/24) - Install Report Viewer 2012
+
 2.0.0 (2017-04-26)
 ------------------
 - Requires at least chef 12.1
