@@ -20,7 +20,12 @@
 # WSUS is a windows only feature
 return unless platform?('windows')
 
-default['wsus_server']['report_viewer']['name'] = 'Microsoft Report Viewer Redistributable 2008 SP1'
-default['wsus_server']['report_viewer']['source'] = 'http://download.microsoft.com/download/3/a/e/3aeb7a63-ade6-48c2-9b6a-d3b6bed17fe9/ReportViewer.exe'
-default['wsus_server']['report_viewer']['checksum'] = '1a0e41b1d82125ae214d3fc1e69b55c4e2dfa060f287290874ca2874b78f86a9'
-default['wsus_server']['report_viewer']['options'] = '/q'
+default['wsus_server']['report_viewer']['prerequisite']['name'] = 'Microsoft System CLR Types for SQL Server 2012 (x64)'
+default['wsus_server']['report_viewer']['prerequisite']['source'] = 'https://download.microsoft.com/download/F/E/D/FEDB200F-DE2A-46D8-B661-D019DFE9D470/ENU/x64/SQLSysClrTypes.msi'
+default['wsus_server']['report_viewer']['prerequisite']['checksum'] = '674c396e9c9bf389dd21cec0780b3b4c808ff50c570fa927b07fa620db7d4537'
+default['wsus_server']['report_viewer']['prerequisite']['options'] = '/q'
+
+default['wsus_server']['report_viewer']['runtime']['name'] = 'Microsoft Report Viewer Runtime 2012'
+default['wsus_server']['report_viewer']['runtime']['source'] = 'https://download.microsoft.com/download/F/B/7/FB728406-A1EE-4AB5-9C56-74EB8BDDF2FF/ReportViewer.msi'
+default['wsus_server']['report_viewer']['runtime']['checksum'] = '948f28452abddd90b27dc80aba1b48c3faedcf2bd42254c71b5b1e19ac5c6daf'
+default['wsus_server']['report_viewer']['runtime']['options'] = '/q'
