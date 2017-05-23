@@ -24,29 +24,8 @@ include WsusServer::BaseProvider
 def load_current_resource
   @current_resource = Chef::Resource::WsusServerConfiguration.new(@new_resource.name, @run_context)
   # Load current_resource from Powershell
-  script = <<-EOS
-    $assembly = [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration')
-    if ($assembly -ne $null) {
-      # Sets buffer size to avoid 80 column limitation, a width greater than 1000 is useless
-      $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(1000, $Host.UI.RawUI.BufferSize.Height)
-      # Sets invariant culture for current session to avoid Floating point conversion issue
-      [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
-
-      # Defines single-level "YAML" formatters to avoid DateTime and TimeSpan conversion issue in ruby
-      $valueFormatter = { param($_); if ($_ -is [DateTime] -or $_ -is [TimeSpan]) { "'$($_)'" } else { $_ } }
-      $objectFormatter = { param($_); $_.psobject.Properties | foreach { "$($_.name): $(&$valueFormatter $_.value)" } }
-
-      $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
-      $conf = $wsus.GetConfiguration()
-
-      # First document is Wsus Configuration
-      &$objectFormatter $conf
-
-      # Second document is the list of enabled Update languages on current server
-      Write-Host '---'
-      $conf.GetEnabledUpdateLanguages() | foreach { '- "' + $_ + '"' }
-    }
-  EOS
+  $conf = $wsus.GetConfiguration()
+  $conf.GetEnabledUpdateLanguages() | foreach { '- "' + $_ + '"' }
 
   properties, languages = YAML.load_stream(powershell_out64(script).stdout)
   @current_resource.properties.merge! properties

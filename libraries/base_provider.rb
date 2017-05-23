@@ -50,6 +50,20 @@ module WsusServer
       @endpoint ||= @new_resource.endpoint ? WsusServer::BaseProvider.uri_to_wsus_endpoint_params(@new_resource.endpoint) : ''
     end
 
+    def admin_proxy
+      require 'win32ole'
+      @admin_proxy ||= ::WIN32OLE.new 'Microsoft.UpdateServices.Administration.AdminProxy'
+    end
+
+    def endpoint
+      if @new_resource.endpoint
+        uri = URI @new_resource.endpoint
+        admin_proxy.GetRemoteUpdateServer uri.host, 'https'.eql?(uri.scheme.downcase), uri.port
+      else
+        admin_proxy.GetUpdateServerInstance
+      end
+    end
+
     def powershell
       locate_sysnative_cmd('powershell.exe')
     end
