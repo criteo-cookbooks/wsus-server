@@ -41,31 +41,28 @@ end
 
 require 'chef/win32/version'
 if node['platform_version'].to_f >= 6.2
-  [
-    'NET-WCF-HTTP-Activation45', # This feature is required for KB3159706
-    'UpdateServices',
-    'UpdateServices-UI',
-  ].each do |feature_name|
-    windows_feature feature_name do
-      action         :install
-      all            true
-      install_method :windows_feature_powershell if respond_to? :install_method
-      provider       :windows_feature_powershell unless respond_to? :install_method
+
+  if setup_conf['sqlinstance_name']
+    wsus_features = %w(NET-WCF-HTTP-Activation45 UpdateServices-Services UpdateServices-UI UpdateServices-DB)
+  else
+    wsus_features = %w(NET-WCF-HTTP-Activation45 UpdateServices-Services UpdateServices-UI UpdateServices-WidDB)
+  end
+
+  windows_cb_version = Chef::Version.new(node['cookbooks']['windows']['version'])
+
+  if windows_cb_version.major >= 3
+    windows_feature_powershell wsus_features do
+      all      true
+      action :install
     end
-  end
-
-  windows_feature 'UpdateServices-WidDB' do
-    action         setup_conf['sqlinstance_name'] ? :remove : :install
-    all            true
-    install_method :windows_feature_powershell if respond_to? :install_method
-    provider       :windows_feature_powershell unless respond_to? :install_method
-  end
-
-  windows_feature 'UpdateServices-DB' do
-    action         setup_conf['sqlinstance_name'] ? :install : :remove
-    all            true
-    install_method :windows_feature_powershell if respond_to? :install_method
-    provider       :windows_feature_powershell unless respond_to? :install_method
+  else
+    wsus_features.each do |feature|
+      windows_feature feature do
+        all      true
+        provider Chef::Provider::WindowsFeaturePowershell
+        action :install
+      end
+    end
   end
 
   guard_file = ::File.join(Chef::Config['file_cache_path'], 'wsus_postinstall')
