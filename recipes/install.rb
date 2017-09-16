@@ -48,7 +48,6 @@ if node['platform_version'].to_f >= 6.2
   ].each do |feature_name|
     windows_feature feature_name do
       action         :install
-      all            true
       install_method :windows_feature_powershell if respond_to? :install_method
       provider       :windows_feature_powershell unless respond_to? :install_method
     end
