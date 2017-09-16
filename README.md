@@ -234,6 +234,8 @@ Contributing
 5. Run the tests, ensuring they all pass
 6. Submit a Pull Request using Github
 
+*NB.* do not change the version in the metadata nor update the changelog. This'll be done by one of the cookbook maintainer.
+
 License and Authors
 -------------------
 Authors: [Baptiste Courtois][author] (<b.courtois@criteo.com>)
