@@ -22,7 +22,7 @@ use_inline_resources
 include WsusServer::BaseProvider
 
 def load_current_resource
-  @current_resource = Chef::Resource::WsusServerSubscription.new(@new_resource.name, @run_context)
+  @current_resource = Chef::Resource.resource_for_node(:wsus_server_subscription, node).new(@new_resource.name, @run_context)
   # Load current_resource from Powershell
   script = <<-EOS
     $assembly = [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration')
