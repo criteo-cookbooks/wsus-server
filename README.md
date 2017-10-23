@@ -2,6 +2,7 @@ Wsus-server Cookbook
 =============
 [![Cookbook Version][cookbook_version]][cookbook]
 [![Build Status][build_status]][build_status]
+[![License][license]][license]
 
 Installs WSUS (Windows Server Update Services) and configure approved updates.
 
@@ -271,3 +272,4 @@ limitations under the License.
 [build_status]:          https://api.travis-ci.org/criteo-cookbooks/wsus-server.svg?branch=master
 [cookbook_version]:      https://img.shields.io/cookbook/v/wsus-server.svg
 [cookbook]:              https://supermarket.chef.io/cookbooks/wsus-server
+[license]:               https://img.shields.io/github/license/criteo-cookbooks/wsus-server.svg
