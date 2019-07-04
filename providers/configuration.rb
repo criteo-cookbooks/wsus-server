@@ -33,7 +33,7 @@ def load_current_resource
       [Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
 
       # Defines single-level "YAML" formatters to avoid DateTime and TimeSpan conversion issue in ruby
-      $valueFormatter = { param($_); if ($_ -is [DateTime] -or $_ -is [TimeSpan]) { "'$($_)'" } else { $_ } }
+      $valueFormatter = { param($_); if ($_ -is [DateTime] -or $_ -is [TimeSpan] -or $_ -is [String]) { $_ = $_ -replace "'", "''"; "'$($_)'" } else { $_ } }
       $objectFormatter = { param($_); $_.psobject.Properties | foreach { "$($_.name): $(&$valueFormatter $_.value)" } }
 
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer(#{endpoint_params})
