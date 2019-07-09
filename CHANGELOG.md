@@ -2,6 +2,10 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+2.3.0 (2019-07-09)
+------------------
+- [PR 32](https://github.com/criteo-cookbooks/wsus-server/pull/32) - Quote strings when loading the configuration
+
 2.2.0 (2017-10-23)
 ------------------
 - [PR 29](https://github.com/criteo-cookbooks/wsus-server/pull/29) - Make providers Chef13 compatible - Thanks @knightorc
