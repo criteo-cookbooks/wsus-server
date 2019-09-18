@@ -79,7 +79,11 @@ action :configure do
       end
 
       updated_properties.each do |k, v|
-        script << "$conf.#{k} = #{powershell_value(v)}\n"
+        if k.downcase == 'proxypassword'
+          script << "$conf.SetProxyPassword(#{powershell_value(v)})\n"
+        else
+          script << "$conf.#{k} = #{powershell_value(v)}\n"
+        end
       end
       script << '$conf.Save()'
 
