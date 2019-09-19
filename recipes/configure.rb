@@ -27,6 +27,7 @@ server_conf = node['wsus_server']['configuration']
 wsus_server_configuration 'Wsus server configuration' do
   master_server                                    server_conf['master_server']
   update_languages                                 server_conf['update_languages']
+  proxy_password                                   server_conf['proxy_password']
   properties                                       server_conf['properties']
 end
 

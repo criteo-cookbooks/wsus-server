@@ -51,14 +51,16 @@ def load_current_resource
   properties, languages = YAML.load_stream(powershell_out64(script).stdout)
   @current_resource.properties.merge! properties
   @current_resource.update_languages languages
+  @current_resource.proxy_password properties['ProxyPassword']
 end
 
 action :configure do
   updated_properties = diff_hash(@new_resource.properties, @current_resource.properties)
   # Replica servers can't change their update languages
   languages_unchanged = @new_resource.properties['IsReplicaServer'] || array_equals(@new_resource.update_languages, @current_resource.update_languages)
+  proxy_password_unchanged = @new_resource.proxy_password == @current_resource.proxy_password
 
-  unless updated_properties.empty? && languages_unchanged
+  unless updated_properties.empty? && languages_unchanged && proxy_password_unchanged
     converge_by 'configuring Wsus server' do
       script = <<-EOS
         [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
@@ -78,12 +80,10 @@ action :configure do
         EOS
       end
 
+      script << "$conf.SetProxyPassword(#{powershell_value(@new_resource.proxy_password)})\n" unless proxy_password_unchanged
+
       updated_properties.each do |k, v|
-        if k.downcase == 'proxypassword'
-          script << "$conf.SetProxyPassword(#{powershell_value(v)})\n"
-        else
-          script << "$conf.#{k} = #{powershell_value(v)}\n"
-        end
+        script << "$conf.#{k} = #{powershell_value(v)}\n"
       end
       script << '$conf.Save()'
 
