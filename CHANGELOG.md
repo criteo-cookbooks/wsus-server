@@ -2,6 +2,10 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+2.3.2 (2019-09-19)
+------------------
+- [PR 35](https://github.com/criteo-cookbooks/wsus-server/pull/35) - Use ProxyPassword from the resource definition
+
 2.3.1 (2019-09-18)
 ------------------
 - [PR 34](https://github.com/criteo-cookbooks/wsus-server/pull/34) - Use SetProxyPassword for ProxyPassword
