@@ -13,6 +13,8 @@ This cookbook requires Chef 12.1+.
 ### Platforms
 * Windows Server 2008 (R1, R2)
 * Windows Server 2012 (R1, R2)
+* Windows Server 2016
+* Windows Server 2019
 
 ### Cookbooks
 The following cookbooks are required as noted:
