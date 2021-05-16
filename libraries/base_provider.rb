@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Library:: base_provider
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -26,10 +26,6 @@ module WsusServer
     include Chef::Mixin::ShellOut
     include Windows::Helper
 
-    def whyrun_supported?
-      true
-    end
-
     def self.uri_to_wsus_endpoint_params(uri)
       uri = URI uri
       "'#{uri.host}', #{'https'.casecmp(uri.scheme).zero?}, #{uri.port}"
@@ -54,7 +50,7 @@ module WsusServer
       locate_sysnative_cmd('powershell.exe')
     end
 
-    def powershell_out64(cmd, timeout=300)
+    def powershell_out64(cmd, timeout = 300)
       flags = [
         # Hides the copyright banner at startup.
         '-NoLogo',
@@ -76,7 +72,7 @@ module WsusServer
       # => https://msdn.microsoft.com/en-us/library/windows/desktop/aa384187.aspx
       cmd = shell_out "#{powershell} #{flags.join(' ')} -EncodedCommand #{encoded_command}", timeout: timeout
       cmd.error!
-      fail 'Invalid syntax in PowershellScript' if cmd.stderr && cmd.stderr.include?('ParserError')
+      raise 'Invalid syntax in PowershellScript' if cmd.stderr && cmd.stderr.include?('ParserError')
       cmd
     end
 

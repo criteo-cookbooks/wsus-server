@@ -6,10 +6,6 @@ group :test do
   gem 'rspec-mocks'
   gem 'chefspec',   '>= 4.2'
   gem 'fauxhai',    '>= 2.2'
-  gem 'foodcritic', '>= 4.0'
-  gem 'gherkin',    '~> 5.1'
-
-  platforms :mri_19 do
-    gem 'ohai', '~> 7.4.0'
-  end
+  gem 'cookstyle'
+  gem 'gherkin', '~> 5.1'
 end

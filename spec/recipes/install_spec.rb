@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'wsus-server::install' do
-
   describe 'On windows' do
     it 'creates the WSUS content directory when content_dir is provided' do
       conf = { wsus_server: { setup: { content_dir: 'content_dir' } } }
