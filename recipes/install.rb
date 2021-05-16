@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Recipe:: install
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -24,11 +24,11 @@ setup_conf = node['wsus_server']['setup']
 
 setup_options = ''
 if setup_conf['sqlinstance_name']
-  if node['platform_version'].to_f >= 6.2
-    setup_options << " SQL_INSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
-  else
-    setup_options << " SQLINSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
-  end
+  setup_options << if node['platform_version'].to_f >= 6.2
+                     " SQL_INSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
+                   else
+                     " SQLINSTANCE_NAME=\"#{setup_conf['sqlinstance_name']}\""
+                   end
 end
 
 if setup_conf['content_dir']
@@ -130,4 +130,4 @@ else
 end
 
 # Wsus does not need configuration when setup as frontend server
-include_recipe 'wsus-server::configure'          unless setup_conf['frontend_setup']
+include_recipe 'wsus-server::configure' unless setup_conf['frontend_setup']

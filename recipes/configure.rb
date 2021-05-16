@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Recipe:: configure
 #
 # Copyright:: Copyright (c) 2014 Criteo.

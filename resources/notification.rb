@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Resource:: notification
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -21,7 +21,7 @@ include WsusServer::BaseResource
 
 default_action :configure
 
-FREQUENCY_VALUES = %w(Daily Weekly)
+FREQUENCY_VALUES = %w(Daily Weekly).freeze
 
 def enable_sync_notification(arg = nil)
   if arg.nil?

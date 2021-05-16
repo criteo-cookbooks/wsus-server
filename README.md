@@ -8,7 +8,7 @@ Installs WSUS (Windows Server Update Services) and configure approved updates.
 
 Requirements
 ------------
-This cookbook requires Chef 12.1+.
+This cookbook requires Chef 13+.
 
 ### Platforms
 * Windows Server 2008 (R1, R2)

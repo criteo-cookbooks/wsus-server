@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Provider:: subscription
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -17,7 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-use_inline_resources
 
 include WsusServer::BaseProvider
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'wsus-server::freeze' do
   describe 'On windows' do
-    def stub_powershell_guard(result=true)
+    def stub_powershell_guard(result = true)
       stub_command("      [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null\n      $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()\n      ($wsus.GetComputerTargetGroups() | where Name -eq '') -eq $null\n").and_return(result)
     end
 

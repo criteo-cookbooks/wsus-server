@@ -6,9 +6,9 @@
 require 'chefspec'
 require 'chefspec/berkshelf'
 
-WINDOWS_2008_OHAI = { platform: 'windows', version: '2008R2' }
-WINDOWS_2012_OHAI = { platform: 'windows', version: '2012R2' }
-LINUX_OHAI = { platform: 'centos', version: '6.5' }
+WINDOWS_2008_OHAI = { platform: 'windows', version: '2008R2' }.freeze
+WINDOWS_2012_OHAI = { platform: 'windows', version: '2012R2' }.freeze
+LINUX_OHAI = { platform: 'centos', version: '6.5' }.freeze
 
 def chef_run(ohais = {}, attributes = {})
   # Mock file_cache_path
@@ -18,12 +18,15 @@ def chef_run(ohais = {}, attributes = {})
     node.set.merge!(attributes)
   end.converge(described_recipe)
 end
-def windows2008_chef_run(attributes= {})
+
+def windows2008_chef_run(attributes = {})
   chef_run(WINDOWS_2008_OHAI, attributes)
 end
+
 def windows2012_chef_run(attributes = {})
   chef_run(WINDOWS_2012_OHAI, attributes)
 end
+
 def linux_chef_run(attributes = {})
   chef_run(LINUX_OHAI, attributes)
 end

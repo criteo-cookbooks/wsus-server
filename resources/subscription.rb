@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Resource:: subscription
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -58,5 +58,5 @@ def synchronize_categories(arg = nil)
 end
 
 def configure_timeout(arg = nil)
-  set_or_return(:configure_timeout, arg, kind_of: Fixnum)
+  set_or_return(:configure_timeout, arg, kind_of: Integer)
 end
