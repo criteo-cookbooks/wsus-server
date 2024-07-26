@@ -82,8 +82,8 @@ module WsusServer
 
     def powershell_value(val)
       case val
-      when FalseClass
-        'false'
+      when TrueClass, FalseClass
+        "$#{val}"
       when Array
         "@(#{val.map { |v| powershell_value(v) }.join(',')})"
       when Hash
