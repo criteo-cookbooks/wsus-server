@@ -5,7 +5,6 @@ license          'Apache-2.0'
 description      'Installs wsus server'
 version          '2.3.2'
 supports         'windows'
-depends          'windows'
 
 chef_version '>= 12.1'
 source_url 'https://github.com/criteo-cookbooks/wsus-server'
