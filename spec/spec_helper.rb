@@ -4,28 +4,31 @@
 # loaded once.
 #
 require 'chefspec'
-require 'chefspec/berkshelf'
+require 'chefspec/policyfile'
 
-WINDOWS_2008_OHAI = { platform: 'windows', version: '2008R2' }
-WINDOWS_2012_OHAI = { platform: 'windows', version: '2012R2' }
-LINUX_OHAI = { platform: 'centos', version: '6.5' }
+WINDOWS_2016_OHAI = { platform: 'windows', version: '2016' }.freeze
+WINDOWS_2019_OHAI = { platform: 'windows', version: '2019' }.freeze
+LINUX_OHAI = { platform: 'centos', version: '8' }.freeze
 
-def chef_run(ohais = {}, attributes = {})
+def custom_chef_run(ohais = {}, attributes = {})
   # Mock file_cache_path
   allow(Chef::Config).to receive(:[]).and_call_original
   allow(Chef::Config).to receive(:[]).with('file_cache_path').and_return('')
   ChefSpec::SoloRunner.new(ohais) do |node|
-    node.set.merge!(attributes)
+    node.override.merge!(attributes)
   end.converge(described_recipe)
 end
-def windows2008_chef_run(attributes= {})
-  chef_run(WINDOWS_2008_OHAI, attributes)
+
+def windows2016_chef_run(attributes = {})
+  custom_chef_run(WINDOWS_2016_OHAI, attributes)
 end
-def windows2012_chef_run(attributes = {})
-  chef_run(WINDOWS_2012_OHAI, attributes)
+
+def windows2019_chef_run(attributes = {})
+  custom_chef_run(WINDOWS_2019_OHAI, attributes)
 end
+
 def linux_chef_run(attributes = {})
-  chef_run(LINUX_OHAI, attributes)
+  custom_chef_run(LINUX_OHAI, attributes)
 end
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration

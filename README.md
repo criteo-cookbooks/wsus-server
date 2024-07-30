@@ -11,8 +11,6 @@ Requirements
 This cookbook requires Chef 12.1+.
 
 ### Platforms
-* Windows Server 2008 (R1, R2)
-* Windows Server 2012 (R1, R2)
 * Windows Server 2016
 * Windows Server 2019
 
@@ -196,28 +194,6 @@ source    | Source of the windows package                      | String | *depen
 checksum  | Checksum of the windows package                    | String | *depends of the architecture*
 options   | Options to use when installing the windows package | String | `/q`
 
-## wsus-server::report_viewer
-Install reporting viewer 2012 to enable wsus reports.
-
-### Attributes
-Attributes to configure Reportviewer prerequisite package are accessible via `node['wsus_server']['report_viewer']['prerequisite']`.
-
-Attribute | Description                                        | Type   | Default
-----------|----------------------------------------------------|--------|--------
-name      | Name of the windows package                        | String | `Microsoft System CLR Types for SQL Server 2012 (x64)`
-source    | Source of the windows package                      | String | [https://download.microsoft.com/.../SQLSysClrTypes.msi][sql_clr_types]
-checksum  | Checksum of the windows package                    | String | `674c396e9c9bf389dd21c...c570fa927b07fa620db7d4537`
-options   | Options to use when installing the windows package | String | `/q`
-
-Attributes to configure Reportviewer runtime package are accessible via `node['wsus_server']['report_viewer']['runtime']`.
-
-Attribute | Description                                        | Type   | Default
-----------|----------------------------------------------------|--------|--------
-name      | Name of the windows package                        | String | `Microsoft Report Viewer 2012 Runtime`
-source    | Source of the windows package                      | String | [https://download.microsoft.com/.../ReportViewer.exe][report_viewer]
-checksum  | Checksum of the windows package                    | String | `948f28452abddd90b27dc...d42254c71b5b1e19ac5c6daf`
-options   | Options to use when installing the windows package | String | `/q`
-
 ## wsus-server::synchronize
 This recipe performs a synchronous update of the update catalog, according to the configured subscriptions.
 
@@ -269,8 +245,6 @@ limitations under the License.
 [subscription]:          http://msdn.microsoft.com/library/microsoft.updateservices.administration.isubscription
 [subscription_members]:  http://msdn.microsoft.com/library/microsoft.updateservices.administration.isubscription_members
 [frontend_server]: 		 http://technet.microsoft.com/library/dd939896
-[report_viewer]:		 https://download.microsoft.com/download/F/B/7/FB728406-A1EE-4AB5-9C56-74EB8BDDF2FF/ReportViewer.msi
-[sql_clr_types]:         https://download.microsoft.com/download/F/E/D/FEDB200F-DE2A-46D8-B661-D019DFE9D470/ENU/x64/SQLSysClrTypes.msi
 [build_status]:          https://api.travis-ci.org/criteo-cookbooks/wsus-server.svg?branch=master
 [cookbook_version]:      https://img.shields.io/cookbook/v/wsus-server.svg
 [cookbook]:              https://supermarket.chef.io/cookbooks/wsus-server

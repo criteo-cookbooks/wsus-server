@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus
+# Cookbook:: wsus
 # Attribute:: server_freeze
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -22,10 +22,9 @@ return unless platform?('windows')
 
 include_recipe 'wsus-server::install'
 
-
 freeze = node['wsus_server']['freeze']['name']
 
-powershell_script 'WSUS Update Freeze' do # ~FC009
+powershell_script 'WSUS Update Freeze' do
   code <<-EOH
     [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
     $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()
@@ -51,7 +50,6 @@ powershell_script 'WSUS Update Freeze' do # ~FC009
       }
     }
   EOH
-  guard_interpreter :powershell_script
   only_if <<-EOH
       [Reflection.Assembly]::LoadWithPartialName('Microsoft.UpdateServices.Administration') | Out-Null
       $wsus = [Microsoft.UpdateServices.Administration.AdminProxy]::GetUpdateServer()

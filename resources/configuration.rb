@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Resource:: configuration
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -20,10 +20,15 @@
 include WsusServer::BaseResource
 
 default_action :configure
+unified_mode true
+
+property :proxy_password, String
+property :update_languages, Array
 
 def initialize(name, run_context = nil)
   super(name, run_context)
 
+  @properties = {}
   # Default computed value for master_server is nil
   @properties['UpstreamWsusServerName'] = nil
   @properties['SyncFromMicrosoftUpdate'] = true
@@ -49,12 +54,4 @@ def master_server(arg = nil)
     @properties['SyncFromMicrosoftUpdate'] = false
     @properties['IsReplicaServer'] = true
   end
-end
-
-def proxy_password(arg = nil)
-  set_or_return(:proxy_password, arg, kind_of: String)
-end
-
-def update_languages(arg = nil)
-  set_or_return(:update_languages, arg, kind_of: Array)
 end

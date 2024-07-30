@@ -11,7 +11,7 @@ pkg/
 # Berkshelf
 .vagrant
 /cookbooks
-Berksfile.lock
+Policyfile.lock.json
 
 # Bundler
 Gemfile.lock
