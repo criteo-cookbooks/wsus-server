@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Resource:: notification
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -20,8 +20,17 @@
 include WsusServer::BaseResource
 
 default_action :configure
+unified_mode true
 
-FREQUENCY_VALUES = %w(Daily Weekly)
+FREQUENCY_VALUES = %w(Daily Weekly).freeze
+
+property :smtp_password, String
+
+def initialize(name, run_context = nil)
+  super(name, run_context)
+
+  @properties = {}
+end
 
 def enable_sync_notification(arg = nil)
   if arg.nil?
@@ -77,10 +86,6 @@ def smtp_host(arg = nil)
   else
     @properties['SmtpHostName'] = arg
   end
-end
-
-def smtp_password(arg = nil)
-  set_or_return(:smtp_password, arg, kind_of: String)
 end
 
 def smtp_port(arg = nil)

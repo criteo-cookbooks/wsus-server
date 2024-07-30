@@ -1,6 +1,6 @@
 #
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
-# Cookbook Name:: wsus-server
+# Cookbook:: wsus-server
 # Resource:: subscription
 #
 # Copyright:: Copyright (c) 2014 Criteo.
@@ -20,6 +20,18 @@
 include WsusServer::BaseResource
 
 default_action :configure
+unified_mode true
+
+property :categories, Array
+property :classifications, Array
+property :synchronize_categories, [true, false]
+property :configure_timeout, Integer
+
+def initialize(name, run_context = nil)
+  super(name, run_context)
+
+  @properties = {}
+end
 
 def automatic_synchronization(arg = nil)
   if arg.nil?
@@ -27,14 +39,6 @@ def automatic_synchronization(arg = nil)
   else
     @properties['SynchronizeAutomatically'] = validate_boolean('automatic_synchronization', arg)
   end
-end
-
-def categories(arg = nil)
-  set_or_return(:categories, arg, kind_of: Array)
-end
-
-def classifications(arg = nil)
-  set_or_return(:classifications, arg, kind_of: Array)
 end
 
 def synchronization_per_day(arg = nil)
@@ -51,12 +55,4 @@ def synchronization_time(arg = nil)
   else
     @properties['SynchronizeAutomaticallyTimeOfDay'] = validate_time('synchronization_time', arg)
   end
-end
-
-def synchronize_categories(arg = nil)
-  set_or_return(:synchronize_categories, arg, kind_of: [TrueClass, FalseClass])
-end
-
-def configure_timeout(arg = nil)
-  set_or_return(:configure_timeout, arg, kind_of: Fixnum)
 end
