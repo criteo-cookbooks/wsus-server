@@ -28,26 +28,26 @@ describe 'wsus-server::install' do
     end
     it 'installs windows feature UpdateServices' do
       [windows2016_chef_run, windows2019_chef_run].each do |chef_run|
-        expect(chef_run).to install_windows_feature('UpdateServices').with(all: true)
+        expect(chef_run).to install_windows_feature('UpdateServices')
       end
     end
     it 'installs windows feature UpdateServices-UI' do
       [windows2016_chef_run, windows2019_chef_run].each do |chef_run|
-        expect(chef_run).to install_windows_feature('UpdateServices-UI').with(all: true)
+        expect(chef_run).to install_windows_feature('UpdateServices-UI')
       end
     end
-    it 'installs windows feature UpdateServices-WidDatabase when no sql_instance_name is provided' do
+    it 'installs windows feature UpdateServices-WidDB when no sql_instance_name is provided' do
       conf = { wsus_server: { setup: { sqlinstance_name: nil } } }
       [windows2016_chef_run(conf), windows2019_chef_run(conf)].each do |chef_run|
-        expect(chef_run).to install_windows_feature('UpdateServices-WidDatabase').with(all: true)
-        expect(chef_run).to remove_windows_feature('UpdateServices-Database').with(all: true)
+        expect(chef_run).to install_windows_feature('UpdateServices-WidDB').with(all: true)
+        expect(chef_run).to remove_windows_feature('UpdateServices-WidDB').with(all: true)
       end
     end
-    it 'installs windows feature UpdateServices-Database instead when sql_instance_name is provided' do
+    it 'installs windows feature UpdateServices-DB instead when sql_instance_name is provided' do
       conf = { wsus_server: { setup: { sqlinstance_name: 'instance' } } }
       [windows2016_chef_run(conf), windows2019_chef_run(conf)].each do |chef_run|
-        expect(chef_run).to remove_windows_feature('UpdateServices-WidDatabase').with(all: true)
-        expect(chef_run).to install_windows_feature('UpdateServices-Database').with(all: true)
+        expect(chef_run).to remove_windows_feature('UpdateServices-DB').with(all: true)
+        expect(chef_run).to install_windows_feature('UpdateServices-DB').with(all: true)
       end
     end
     it 'executes WSUS PostInstall when there is no guard file' do
