@@ -1,15 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rake'
-
 group :test do
-  gem 'rspec-mocks'
-  gem 'chefspec',   '>= 4.2'
-  gem 'fauxhai',    '>= 2.2'
-  gem 'foodcritic', '>= 4.0'
-  gem 'gherkin',    '~> 5.1'
-
-  platforms :mri_19 do
-    gem 'ohai', '~> 7.4.0'
-  end
+  gem 'chef', '= 17.9.46'
+  gem 'cookstyle', '>= 7.32.8'
+  gem 'fauxhai-chef', '>= 9.3.16'
+  # TODO: Unpin chefspec and remove rspec pin once chefspec integrates breaking rspec-expectations change
+  gem 'chefspec', '= 9.3.6'
+  gem 'rspec-expectations', '= 3.12.3'
 end
