@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'wsus-server::report_viewer' do
   describe 'On windows' do
     it 'installs the report viewer' do
-      [windows2008_chef_run, windows2008_chef_run].each do |chef_run|
+      [windows2016_chef_run, windows2016_chef_run].each do |chef_run|
         expect(chef_run).to install_windows_package('Microsoft Report Viewer Redistributable 2008 SP1')
       end
     end
