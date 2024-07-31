@@ -2,6 +2,10 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+2.3.3 (2024-07-31)
+------------------
+- [PR 39](https://github.com/criteo-cookbooks/wsus-server/pull/39) - Properly translate true/false from ruby to Powershell
+
 2.3.2 (2019-09-19)
 ------------------
 - [PR 35](https://github.com/criteo-cookbooks/wsus-server/pull/35) - Use ProxyPassword from the resource definition
