@@ -2,6 +2,10 @@ Wsus-server CHANGELOG
 ==============
 This file is used to list changes made in each version of the wsus-server cookbook.
 
+2.3.4 (2026-10-30)
+------------------
+- [PR 40](https://github.com/criteo-cookbooks/wsus-server/pull/40) - Use Integer instead of Fixnum, removed in Ruby 3.2 (Chef/Cinc 19)
+
 2.3.3 (2024-07-31)
 ------------------
 - [PR 39](https://github.com/criteo-cookbooks/wsus-server/pull/39) - Properly translate true/false from ruby to Powershell
